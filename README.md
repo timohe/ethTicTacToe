@@ -3,7 +3,7 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 
 # How to deploy contract
 1. open geth
-geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpcapi eth,web3,personal,net,miner,admin
+$ geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpcapi eth,web3,personal,net,miner,admin
 
 2. attach new instance (new terminal):
 $ geth attach http://127.0.0.1:8545
