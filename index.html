@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+    <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
+</head>
+<body>
+    <div class="container">
+
+        <h1>Host a new game</h1>
+
+        <!-- <h2 id="instructor"></h2>
+
+        <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+        <input id="name" type="text">
+
+        <label for="name" class="col-lg-2 control-label">Instructor Age</label>
+        <input id="age" type="text"> -->
+
+        <button onclick="host();" id="button">Host game</button>
+
+
+    </div>
+
+    <script>
+        web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));		
+		web3.eth.defaultAccount = web3.eth.accounts[0];
+
+		var contractAddr = "0xa6affDE044fD25eAd5AaB3E192C88D2131D53901"; // Contract Address, can be hardcoded later
+		var contractAbi = [
+	
+		{
+			"anonymous": false,
+			"inputs": [
+				{
+					"indexed": false,
+					"name": "error",
+					"type": "string"
+				}
+			],
+			"name": "Error",
+			"type": "event"
+		},
+		{
+			"constant": false,
+			"inputs": [],
+			"name": "hostNewGame",
+			"outputs": [
+				{
+					"name": "message",
+					"type": "string"
+				}
+			],
+			"payable": true,
+			"stateMutability": "payable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "host",
+					"type": "address"
+				}
+			],
+			"name": "joinExistingGame",
+			"outputs": [
+				{
+					"name": "message",
+					"type": "string"
+				}
+			],
+			"payable": true,
+			"stateMutability": "payable",
+			"type": "function"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "host",
+					"type": "address"
+				},
+				{
+					"name": "row",
+					"type": "uint256"
+				},
+				{
+					"name": "column",
+					"type": "uint256"
+				}
+			],
+			"name": "play",
+			"outputs": [
+				{
+					"name": "message",
+					"type": "string"
+				}
+			],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": true,
+			"inputs": [],
+			"name": "sayHello",
+			"outputs": [
+				{
+					"name": "message",
+					"type": "string"
+				}
+			],
+			"payable": false,
+			"stateMutability": "pure",
+			"type": "function"
+		}
+		
+]
+		var contract = new web3.eth.Contract(contractAbi, contractAddr)
+
+		var hostAdr = "0x99704a2eb200abcc81b44e685f113bb83eaec43a";
+		var opponentAdr = "0x605bb25b9c17dd080ea20a0ab58ad8bf33805fce";
+
+		function host() // make play
+		{
+			console.log("Hosting new game...");	
+			contract.methods.hostNewGame().send({from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61", value: 5000000})
+				.on('receipt', function(receipt){console.log(receipt)})
+				.on('error', function(error){
+					// console.log(error); 
+					var savedError = error;
+					console.log("This is the error: " + JSON.stringify(savedError));
+					
+					// console.log(util.inspect(error));
+				})
+				// .on('error', console.error);
+
+		};
+
+
+    </script>
+
+</body>
+</html>

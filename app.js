@@ -1,4 +1,5 @@
 //geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpccorsdomain="*" --rpcapi eth,web3,personal,net,miner,admin
+//geth attach http://127.0.0.1:8545
 //personal.unlockAccount(eth.accounts[0], "123456", 999999)
 /*
 A simple script that defines an address, gets the balance of it and then converts it to Ether before showing the result in the console.
@@ -7,6 +8,7 @@ For an explanation of this code, navigate to the wiki https://github.com/ThatOth
 
 // Require the web3 node module.
 var Web3 = require('web3');
+var util = require('util')
 
 // Show Web3 where it needs to look for a connection to Ethereum.
 web3 = new Web3(new Web3.providers.HttpProvider('http://localhost:8545'));
@@ -105,7 +107,7 @@ var contractAbi = [
 ]
 var contract = new web3.eth.Contract(contractAbi, contractAddr);
 
-//Defined by user
+//Defined by user 
 var hostAdr = "0x99704a2eb200abcc81b44e685f113bb83eaec43a";
 var opponentAdr = "0x605bb25b9c17dd080ea20a0ab58ad8bf33805fce";
 
@@ -129,7 +131,14 @@ function host() // make play
 	console.log("Hosting new game...");	
 	contract.methods.hostNewGame().send({from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61", value: 5000000})
 		.on('receipt', function(receipt){console.log(receipt)})
-		.on('error', console.error);
+		.on('error', function(error){
+			// console.log(error); 
+			var savedError = error;
+			console.log("This is the error: " + JSON.stringify(savedError));
+			
+			// console.log(util.inspect(error));
+		})
+		// .on('error', console.error);
 
 };
 
