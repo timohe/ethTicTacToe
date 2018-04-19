@@ -150,8 +150,9 @@
 				}		
 			]
 		var contract;
-		var myAddress = web3.eth.accounts[0];
-		console.log("this is my addres" + web3.eth.accounts[0])
+		var myAddress = web3.eth.getAccounts();
+		
+		
 
 		function setContractAddress() {
 			contractAddr = document.getElementById("contractAddress").value;
@@ -159,9 +160,8 @@
 			contract = new web3.eth.Contract(contractAbi, contractAddr);
 		}
 
-
 		function host(){
-			console.log("This was the contract address which was inputed: " + contractAddr);
+			console.log("This is your address: " + JSON.stringify(myAddress.fulfillmentValue[0]));
 			console.log("Hosting new game...");	
 			valueToTransact = web3.utils.toWei('5', 'ether');
 			contract.methods.hostNewGame().send({from: myAddress, value: valueToTransact})
