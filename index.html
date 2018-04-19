@@ -13,15 +13,16 @@
 
         <h1>Host a new game</h1>
 
-        <!-- <h2 id="instructor"></h2>
+        <!-- <h2 id="instructor"></h2> -->
 
-        <label for="name" class="col-lg-2 control-label">Instructor Name</label>
+        <label for="name" class="col-lg-2 control-label">Contract Address</label>
         <input id="name" type="text">
 
-        <label for="name" class="col-lg-2 control-label">Instructor Age</label>
+        <!-- <label for="name" class="col-lg-2 control-label">Instructor Age</label>
         <input id="age" type="text"> -->
 
-        <button onclick="host();" id="button">Host game</button>
+		<button onclick="host();" id="button">Host game</button>
+		<button onclick="printBoard();" id="button">Print Board</button>
 
 
     </div>
@@ -30,7 +31,7 @@
         web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));		
 		web3.eth.defaultAccount = web3.eth.accounts[0];
 
-		var contractAddr = "0xa6affDE044fD25eAd5AaB3E192C88D2131D53901"; // Contract Address, can be hardcoded later
+		var contractAddr = "0xdb23757741ec9fd0f5d2d3912f4e94151f8d6753"; // Contract Address, can be hardcoded later
 		var contractAbi = [
 	
 		{
@@ -126,20 +127,26 @@
 		var hostAdr = "0x99704a2eb200abcc81b44e685f113bb83eaec43a";
 		var opponentAdr = "0x605bb25b9c17dd080ea20a0ab58ad8bf33805fce";
 
-		function host() // make play
-		{
+		function host(){
 			console.log("Hosting new game...");	
-			contract.methods.hostNewGame().send({from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61", value: 5000000})
+			valueToTransact = web3.utils.toWei('5', 'ether');
+			contract.methods.hostNewGame().send({from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61", value: valueToTransact})
 				.on('receipt', function(receipt){console.log(receipt)})
 				.on('error', function(error){
-					// console.log(error); 
 					var savedError = error;
 					console.log("This is the error: " + JSON.stringify(savedError));
-					
-					// console.log(util.inspect(error));
 				})
-				// .on('error', console.error);
+		};
 
+		function printBoard(){
+			console.log("Getting state...");	
+			//TODO: get state
+			contract.methods.printBoard(hostAdr).call()
+				.on('receipt', function(receipt){console.log(receipt)})
+				.on('error', function(error){
+					var savedError = error;
+					console.log("This is the error: " + JSON.stringify(savedError));
+				})
 		};
 
 
