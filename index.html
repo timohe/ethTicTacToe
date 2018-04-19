@@ -150,22 +150,32 @@
 				}		
 			]
 		var contract;
-
-		var hostAdr = "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61";
-		var opponentAdr = "0x605bb25b9c17dd080ea20a0ab58ad8bf33805fce";
+		var myAddress = web3.eth.accounts[0];
+		console.log("this is my addres" + web3.eth.accounts[0])
 
 		function setContractAddress() {
 			contractAddr = document.getElementById("contractAddress").value;
 			console.log("Address set as: " + contractAddr);
 			contract = new web3.eth.Contract(contractAbi, contractAddr);
-
 		}
+
 
 		function host(){
 			console.log("This was the contract address which was inputed: " + contractAddr);
 			console.log("Hosting new game...");	
 			valueToTransact = web3.utils.toWei('5', 'ether');
-			contract.methods.hostNewGame().send({from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61", value: valueToTransact})
+			contract.methods.hostNewGame().send({from: myAddress, value: valueToTransact})
+				.on('receipt', function(receipt){console.log(receipt)})
+				.on('error', function(error){
+					var savedError = error;
+					console.log("This is the error: " + JSON.stringify(savedError));
+				})
+		};
+
+		function joinExistingGame(){
+			console.log("Joining existing game...");	
+			valueToTransact = web3.utils.toWei('5', 'ether');
+			contract.methods.joinExistingGame(hostAdr).send({from: web3.eth.accounts[0], value: valueToTransact})
 				.on('receipt', function(receipt){console.log(receipt)})
 				.on('error', function(error){
 					var savedError = error;
