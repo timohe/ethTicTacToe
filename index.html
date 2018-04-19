@@ -4,25 +4,42 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Document</title>
+    <title>Super Smart Contract .... not</title>
 
     <script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
 </head>
 <body>
     <div class="container">
 
-        <h1>Host a new game</h1>
+		<div>
+			<h3>Contract Address (will be hardcoded if deployed final version)</h3>
+			<input name="contractAddress" id="contractAddress" type="text">
+			<button onclick="setContractAddress();" id="button">Set Contract Address</button>
+		</div>
+
+        <h3>Host a new game</h3>
+		<button onclick="host();" id="button">Host new game</button>
 
         <!-- <h2 id="instructor"></h2> -->
+		
+        <div>
+			<h3>Hosts address to join game</h3>
+			<input name="hostAddress" id="hostAddress" type="text">
+			<button onclick="join();" id="button">Join hosted game</button>
 
-        <label for="name" class="col-lg-2 control-label">Contract Address</label>
-        <input id="name" type="text">
+		</div>
+		
+		<div>
+			<h3>Print the board</h3>
+			<button onclick="printBoard();" id="button">Print Board</button>
+		</div>
+		
+		
 
         <!-- <label for="name" class="col-lg-2 control-label">Instructor Age</label>
         <input id="age" type="text"> -->
 
-		<button onclick="host();" id="button">Host game</button>
-		<button onclick="printBoard();" id="button">Print Board</button>
+		
 
 
     </div>
@@ -31,103 +48,121 @@
         web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));		
 		web3.eth.defaultAccount = web3.eth.accounts[0];
 
-		var contractAddr = "0xdb23757741ec9fd0f5d2d3912f4e94151f8d6753"; // Contract Address, can be hardcoded later
+		var contractAddr;
 		var contractAbi = [
-	
-		{
-			"anonymous": false,
-			"inputs": [
 				{
-					"indexed": false,
-					"name": "error",
-					"type": "string"
-				}
-			],
-			"name": "Error",
-			"type": "event"
-		},
-		{
-			"constant": false,
-			"inputs": [],
-			"name": "hostNewGame",
-			"outputs": [
-				{
-					"name": "message",
-					"type": "string"
-				}
-			],
-			"payable": true,
-			"stateMutability": "payable",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
-				}
-			],
-			"name": "joinExistingGame",
-			"outputs": [
-				{
-					"name": "message",
-					"type": "string"
-				}
-			],
-			"payable": true,
-			"stateMutability": "payable",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
+					"anonymous": false,
+					"inputs": [
+						{
+							"indexed": false,
+							"name": "error",
+							"type": "string"
+						}
+					],
+					"name": "Error",
+					"type": "event"
 				},
 				{
-					"name": "row",
-					"type": "uint256"
+					"constant": false,
+					"inputs": [],
+					"name": "hostNewGame",
+					"outputs": [
+						{
+							"name": "message",
+							"type": "string"
+						}
+					],
+					"payable": true,
+					"stateMutability": "payable",
+					"type": "function"
 				},
 				{
-					"name": "column",
-					"type": "uint256"
-				}
-			],
-			"name": "play",
-			"outputs": [
+					"constant": false,
+					"inputs": [
+						{
+							"name": "host",
+							"type": "address"
+						}
+					],
+					"name": "joinExistingGame",
+					"outputs": [],
+					"payable": true,
+					"stateMutability": "payable",
+					"type": "function"
+				},
 				{
-					"name": "message",
-					"type": "string"
-				}
-			],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": true,
-			"inputs": [],
-			"name": "sayHello",
-			"outputs": [
+					"constant": false,
+					"inputs": [
+						{
+							"name": "host",
+							"type": "address"
+						},
+						{
+							"name": "row",
+							"type": "uint256"
+						},
+						{
+							"name": "column",
+							"type": "uint256"
+						}
+					],
+					"name": "play",
+					"outputs": [
+						{
+							"name": "message",
+							"type": "string"
+						}
+					],
+					"payable": false,
+					"stateMutability": "nonpayable",
+					"type": "function"
+				},
 				{
-					"name": "message",
-					"type": "string"
-				}
-			],
-			"payable": false,
-			"stateMutability": "pure",
-			"type": "function"
-		}
-		
-]
-		var contract = new web3.eth.Contract(contractAbi, contractAddr)
+					"constant": false,
+					"inputs": [
+						{
+							"name": "host",
+							"type": "address"
+						}
+					],
+					"name": "printBoard",
+					"outputs": [
+						{
+							"name": "isHostsTurn",
+							"type": "bool"
+						},
+						{
+							"name": "board1",
+							"type": "uint256"
+						},
+						{
+							"name": "board2",
+							"type": "uint256"
+						},
+						{
+							"name": "board3",
+							"type": "uint256"
+						}
+					],
+					"payable": false,
+					"stateMutability": "nonpayable",
+					"type": "function"
+				}		
+			]
+		var contract;
 
-		var hostAdr = "0x99704a2eb200abcc81b44e685f113bb83eaec43a";
+		var hostAdr = "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61";
 		var opponentAdr = "0x605bb25b9c17dd080ea20a0ab58ad8bf33805fce";
 
+		function setContractAddress() {
+			contractAddr = document.getElementById("contractAddress").value;
+			console.log("Address set as: " + contractAddr);
+			contract = new web3.eth.Contract(contractAbi, contractAddr);
+
+		}
+
 		function host(){
+			console.log("This was the contract address which was inputed: " + contractAddr);
 			console.log("Hosting new game...");	
 			valueToTransact = web3.utils.toWei('5', 'ether');
 			contract.methods.hostNewGame().send({from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61", value: valueToTransact})
@@ -142,11 +177,7 @@
 			console.log("Getting state...");	
 			//TODO: get state
 			contract.methods.printBoard(hostAdr).call()
-				.on('receipt', function(receipt){console.log(receipt)})
-				.on('error', function(error){
-					var savedError = error;
-					console.log("This is the error: " + JSON.stringify(savedError));
-				})
+				.then(console.log);
 		};
 
 
