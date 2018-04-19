@@ -120,7 +120,7 @@ contract TicTacToe
                 g.board[row][col] = 0;
     }
     
-    function printBoard(address host) internal view returns (bool isHostsTurn, uint board1, uint board2, uint board3)
+    function printBoard(address host) public returns (bool isHostsTurn, uint board1, uint board2, uint board3)
     {
         Game storage g = games[host];
         isHostsTurn = isHostsTurn;
