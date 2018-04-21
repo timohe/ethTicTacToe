@@ -2,9 +2,9 @@
 Simple TicTacToe game with betting on the Ethereum Blockchain
 
 # Todo
--In smart contract: only accept play() if the field is empty, else throw event handle that on frontend.
--test if join works
--test if payouts work
+-In smart contract: only accept play() if the field is empty, else throw event handle that on frontend.    
+-test if join works    
+-test if payouts work    
 
 ## Get environment ready
 1. open geth        
