@@ -85,7 +85,7 @@ contract TicTacToe
     //do not have to check who won because you can only win if its your turn.
     {
         Game storage g = games[host];
-        for (uint i; i <3; i++){
+        for (uint i; i < 3; i++){
             if(g.board[i][0] != 0 && g.board[i][0] == g.board[i][1] && g.board[i][1] == g.board[i][2] ){
                 return true;   
             }
@@ -105,7 +105,7 @@ contract TicTacToe
     function isTie(address host) internal view returns (bool isItATie)
     {
         Game storage g = games[host];
-        if(g.turnNr >8){
+        if(g.turnNr > 8){
             return true;
         }
     }
@@ -120,9 +120,12 @@ contract TicTacToe
         Game storage g = games[host];
         g.opponent = 0;
            
-        for(uint row; row < 3; row++)
-            for(uint col; col < 3; col++)
+        for(uint row; row < 3; row++){
+            for(uint col; col < 3; col++){
                 g.board[row][col] = 0;
+            }
+        }
+            
     }
     
     function printBoard(address host) public returns (bool isHostsTurn, uint board1, uint board2, uint board3)
