@@ -3,10 +3,10 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 
 # Get environment ready
 1. open geth    
-$ geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpccorsdomain="*" --rpcapi eth,web3,personal,net,miner,admin
+`$ geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpccorsdomain="*" --rpcapi eth,web3,personal,net,miner,admin`
 
 2. attach new instance (new terminal):
-$ geth attach http://127.0.0.1:8545
+`$ geth attach http://127.0.0.1:8545`
 
 3. set account that will receive ether
 > miner.setEtherbase(eth.accounts[0])
