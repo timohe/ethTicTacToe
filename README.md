@@ -1,7 +1,7 @@
 # ethTicTacToe
 Simple TicTacToe game with betting on the Ethereum Blockchain
 
-# Get environment ready
+## Get environment ready
 1. open geth        
 `$ geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpccorsdomain="*" --rpcapi eth,web3,personal,net,miner,admin`
 
@@ -19,15 +19,17 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 
 You're good to go!    
 
-# Deploy the contract
+## Deploy the contract
 1. do 1.-4. from above    
 
 2. go to https://remix.ethereum.org/ and chose web3 provider    
 
 3. after connection click create
 
-# Connect Remix with local folder
-1. install remixd 
-$ npm install -g remixd
-$ remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.
-$ click on the connect button with remix 
+4. contract should appear in your geth console    
+
+## Connect Remix with local folder
+1. install remixd     
+`$ npm install -g remixd`   
+`$ remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.`   
+click on the connect button with remix 
