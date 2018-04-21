@@ -15,7 +15,7 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 `> miner.start(2)`
 
 5. unlock your account:    
-`> personal.unlockAccount(eth.accounts[0], 123456, 999999);`
+`> personal.unlockAccount(eth.accounts[0], "123456", 999999);`
 
 6. Open index.html and you're good to go!    
 
