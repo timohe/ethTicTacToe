@@ -17,7 +17,7 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 5. unlock your account:    
 `> personal.unlockAccount(eth.accounts[0], 123456, 999999);`
 
-You're good to go!    
+6. Open index.html and you're good to go!    
 
 ## Deploy the contract
 1. do 1.-4. from above    
