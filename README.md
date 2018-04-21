@@ -1,6 +1,11 @@
 # ethTicTacToe
 Simple TicTacToe game with betting on the Ethereum Blockchain
 
+# Todo
+-In smart contract: only accept play() if the field is empty, else throw event handle that on frontend.
+-test if join works
+-test if payouts work
+
 ## Get environment ready
 1. open geth        
 `$ geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpccorsdomain="*" --rpcapi eth,web3,personal,net,miner,admin`
