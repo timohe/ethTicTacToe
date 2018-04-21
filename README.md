@@ -20,3 +20,6 @@ $ ./deploy.sh tictactoe.sol
 
 6. test if deploy worked
 start miner and >test
+
+# Connect Remix with local
+example: remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.

@@ -110,6 +110,11 @@ contract TicTacToe
         }
     }
     
+    function removeGame(address host) internal
+    {
+        delete games[host];
+    }
+
     function clearBoard(address host) internal
     {
         Game storage g = games[host];

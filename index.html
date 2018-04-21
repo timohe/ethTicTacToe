@@ -183,6 +183,17 @@
 				})
 		};
 
+		function play(uint, uint){
+			console.log("Joining existing game...");	
+			valueToTransact = web3.utils.toWei('5', 'ether');
+			contract.methods.playGame(hostAdr).send({from: web3.eth.accounts[0], value: valueToTransact})
+				.on('receipt', function(receipt){console.log(receipt)})
+				.on('error', function(error){
+					var savedError = error;
+					console.log("This is the error: " + JSON.stringify(savedError));
+				})
+		};
+
 		function printBoard(){
 			console.log("Getting state...");	
 			//TODO: get state
