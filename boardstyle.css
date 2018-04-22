@@ -1,0 +1,23 @@
+table {
+    width:50%;
+}
+td {
+    width:30%;
+    position:relative;
+}
+td:after{
+    content:'';
+    display:block;
+    margin-top:100%;
+}
+td .content {
+    position:absolute;
+    top:0;
+    bottom:0;
+    left:0;
+    right:0;
+    background:grey;
+    font-size: 9vw;
+    text-align: center;
+    vertical-align: middle;
+}

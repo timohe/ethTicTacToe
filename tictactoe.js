@@ -151,6 +151,7 @@ function host() {
 			console.log("This is the error: " + JSON.stringify(savedError));
 		})
 	hostAddress = userAddress;
+	return;
 };
 
 function joinExistingGame() {
@@ -175,7 +176,7 @@ function makeMove() {
 
 function play(hostAdr, row, col) {
 	console.log("Making move...");
-	contract.methods.playGame(hostAddress).send({ from: web3.eth.accounts[0], data: row, col })
+	contract.methods.play(hostAddress, row, col).send({ from: userAddress})
 		.on('receipt', function (receipt) { 
 			console.log(receipt);
 			refreshBoard(); 
@@ -208,5 +209,7 @@ function refreshBoard() {
 			document.querySelector('.field7').innerHTML = boardArray[6];
 			document.querySelector('.field8').innerHTML = boardArray[7];
 			document.querySelector('.field9').innerHTML = boardArray[8];
+			document.querySelector('.isHostsTurn').innerHTML = result.isHostsTurn;
+			console.log(JSON.stringify(result));
 		});
 };

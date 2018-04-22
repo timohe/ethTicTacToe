@@ -6,78 +6,99 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Super Smart Contract .... not</title>
-	<link rel="stylesheet" type="text/css" href="style.css">
+	
+	<!-- Compiled and minified CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+	<link rel="stylesheet" type="text/css" href="boardstyle.css">
+    <!-- Compiled and minified JavaScript -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 	<script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
 	<script src="tictactoe.js"></script>
 </head>
 
 <body>
+	<table>
+		<tr>
+			<td>
+				<div class="content">1</div>
+			</td>
+			<td>
+				<div class="content">1</div>
+			</td>
+			<td>
+				<div class="content">1</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="content">1</div>
+			</td>
+			<td>
+				<div class="content">1</div>
+			</td>
+			<td>
+				<div class="content">1</div>
+			</td>
+		</tr>
+		<tr>
+			<td>
+				<div class="content">1</div>
+			</td>
+			<td>
+				<div class="content">1</div>
+			</td>
+			<td>
+				<div class="content">1</div>
+			</td>
+		</tr>
+		<table>
 
 	<div>
-		<table id="board" class="board">
-			<tr>
-				<td id="one" class="even"><span class='field1'></span></td>
-				<td id="two"><span class='field2'></span></td>
-				<td id="three" class="even"><span class='field3'></span></td>
-			</tr>
-			<tr>
-				<td id="four"><span class='field4'></span></td>
-				<td id="five" class="even"><span class='field5'></span></td>
-				<td id="six"><span class='field6'></span></td>
-			</tr>
-			<tr>
-				<td id="seven" class="even"><span class='field7'></span></td>
-				<td id="eight"><span class='field8'></span></td>
-				<td id="nine" class="even"><span class='field9'></span></td>
-			</tr>
-		</table>
-	</div>
-
-	<div>
-		current address: 0x9e2f7b00dcec623a49348b2927b16cd7e07bc37a
+		current address: 0x788e18a8839d40e146191ef0eebe37aac10d511d
 	</div>
 	<div>
-		<h3>Contract Address (will be hardcoded if deployed final version)</h3>
+		<h5>Contract Address (will be hardcoded if deployed final version)</h5>
 		<input name="contractAddress" id="contractAddress" type="text">
-		<button onclick="setContractAddress();" id="button">Set Contract Address</button>
+		<button class="waves-effect waves-light btn" onclick="setContractAddress();" id="button">Set Contract Address</button>
 	</div>
 
 	<div>
-		<h3>Select your Account</h3>
+		<h5>Select your Account</h5>
 		<select onchange="changeUserAddress()" id='addressDropdown'></select>
 	</div>
 
-	<h3>Host a new game</h3>
-	<button onclick="host();" id="button">Host new game</button>
+	<h5>Host a new game</h5>
+	<button class="waves-effect waves-light btn" onclick="host();" id="button">Host new game</button>
 
 	<!-- <h2 id="instructor"></h2> -->
 
 	<div>
-		<h3>Hosts address to join game</h3>
+		<h5>Hosts address to join game</h5>
 		<input name="hostAddress" id="hostAddress" type="text">
-		<button onclick="join();" id="button">Join hosted game</button>
+		<button class="waves-effect waves-light btn" onclick="join();" id="button">Join hosted game</button>
 
 	</div>
 
-	<div>
+
+	<!-- <div>
 		<h3>Print the board</h3>
 		<button onclick="getBoardArray();" id="button">Print Board</button>
-	</div>
+	</div> -->
 
 	<div>
-		<h3>Make a move</h3>
+		<h5>Make a move</h5>
 		Row:
 		<input id="moveRow" type="number"> Column:
 		<input id="moveColumn" type="number">
-		<button onclick="makeMove();" id="button">Make move</button>
+		<button class="waves-effect waves-light btn" onclick="makeMove();" id="button">Make move</button>
 	</div>
-	</div>
+	
 
-	<div>
+	<!-- <div>
 			<h3>Show current board</h3>
 			<button onclick="refreshBoard();" id="button">Refresh Board</button>
-		</div>
-		</div>
+	</div> -->
+		
 
 </body>
 
