@@ -109,6 +109,16 @@ var boardArray = [];
 setAddressArrayAndInit();
 
 
+window.onload = function () {
+	//listen for changes in contract field
+	var elem = document.getElementById("contractAddress");
+	elem.addEventListener("blur", function (event) {
+		contractAddr = document.getElementById("contractAddress").value;
+		console.log("Address set as: " + contractAddr);
+		contract = new web3.eth.Contract(contractAbi, contractAddr);
+	}, true);
+}
+
 function setAddressArrayAndInit() {
 	web3.eth.getAccounts().then(function (result) {
 		userAddressesArray = result;
@@ -131,21 +141,8 @@ function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
 	console.log("User address changed to: " + userAddress);
 }
-window.onload = function () {
-	var elem = document.getElementById("contractAddress");
-	elem.addEventListener("blur", function (event) {
-		contractAddr = document.getElementById("contractAddress").value;
-		console.log("Address set as: " + contractAddr);
-		contract = new web3.eth.Contract(contractAbi, contractAddr);
-	}, true);
-}
-
-
-
-
 
 function setContractAddress() {
-
 	contractAddr = document.getElementById("contractAddress").value;
 	console.log("Address set as: " + contractAddr);
 	contract = new web3.eth.Contract(contractAbi, contractAddr);
@@ -164,7 +161,6 @@ function host() {
 			console.log("This is the error: " + JSON.stringify(savedError));
 		})
 	hostAddress = userAddress;
-	return;
 };
 
 function joinExistingGame() {
@@ -201,7 +197,7 @@ function play(hostAdr, row, col) {
 };
 
 function refreshBoard() {
-	console.log("Getting state...");
+	console.log("Refreshing board...");
 	contract.methods.printBoard(hostAddress).call()
 		.then(function (result) {
 			boardArray[0] = parseInt(result.board1.substring(3, 4));

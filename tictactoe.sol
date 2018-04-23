@@ -23,21 +23,21 @@ contract TicTacToe
     
     mapping (address => Game) games;
     
-    function hostNewGame() payable rightAmountPaid public returns (string message)
+    function hostNewGame() payable rightAmountPaid public
     {
         Game storage g = games[msg.sender];
         g.isHostsTurn = true;
-        message = "successfully hosted Game!";
+        emit Error("successfully hosted Game!");
     }
     
-    function joinExistingGame(address host) payable rightAmountPaid public returns (string message)
+    function joinExistingGame(address host) payable rightAmountPaid public
     {
         Game storage g = games[host];
         if(g.opponent == 0 && msg.sender != host)
         {
             g.opponent = msg.sender;
         }
-        message = "successfully joined Game!";
+        emit Error("successfully joined Game!");
     }
     
     function play(address host, uint row, uint column) public returns (string message){
@@ -110,9 +110,10 @@ contract TicTacToe
         }
     }
     
-    function removeGame(address host) internal
+    function removeGame(address host) public returns (string message)
     {
         delete games[host];
+        message = "game was deleted";
     }
 
     function clearBoard(address host) internal
@@ -125,15 +126,14 @@ contract TicTacToe
                 g.board[row][col] = 0;
             }
         }
-            
     }
     
-    function printBoard(address host) public returns (bool isHostsTurn, uint board1, uint board2, uint board3)
+    function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
     {
         Game storage g = games[host];
-        isHostsTurn = isHostsTurn;
         board1 = (999000 + 100 * (g.board[0][0])) + (10 * (g.board[0][1])) + (g.board[0][2]);
         board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
         board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
+        _isHostsTurn = g.isHostsTurn;
     }
 }

@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>Super Smart Contract .... not</title>
+	<title>ethTTT</title>
 
 	<!-- Compiled and minified CSS -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
@@ -18,7 +18,7 @@
 
 <body>
 
-	current address: 0x788e18a8839d40e146191ef0eebe37aac10d511d
+	current address: 0x7c8f73a89388d42b1462d9bbc924b78a8f628caa
 
 	<div class="card-panel">
 		<h4>Set up</h4>
@@ -33,11 +33,6 @@
 			<select class="browser-default" onchange="changeUserAddress()" id='addressDropdown'></select>
 			</select>
 		</div>
-
-
-
-
-		<!-- <select onchange="changeUserAddress()" id='addressDropdown'></select> -->
 	</div>
 
 
@@ -53,48 +48,46 @@
 		<button class="waves-effect waves-light btn" onclick="host();" id="button">Host new game</button>
 	</div>
 
-
-
-
 	<div class="card-panel">
 		<h4>Play!</h4>
-
-
 		<table>
 			<tr>
 				<td>
-					<div class="content">1</div>
+					<div class="content"><span class='field1'></span></div>
 				</td>
 				<td>
-					<div class="content">1</div>
+					<div class="content"><span class='field2'></span></div>
 				</td>
 				<td>
-					<div class="content">1</div>
-				</td>
-			</tr>
-			<tr>
-				<td>
-					<div class="content">1</div>
-				</td>
-				<td>
-					<div class="content">1</div>
-				</td>
-				<td>
-					<div class="content">1</div>
+					<div class="content"><span class='field3'></span></div>
 				</td>
 			</tr>
 			<tr>
 				<td>
-					<div class="content">1</div>
+					<div class="content"><span class='field4'></span></div>
 				</td>
 				<td>
-					<div class="content">1</div>
+					<div class="content"><span class='field5'></span></div>
 				</td>
 				<td>
-					<div class="content">1</div>
+					<div class="content"><span class='field6'></span></div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="content"><span class='field7'></span></div>
+				</td>
+				<td>
+					<div class="content"><span class='field8'></span></div>
+				</td>
+				<td>
+					<div class="content"><span class='field9'></span></div>
 				</td>
 			</tr>
 		</table>
+		<div>
+			<p>Is it the hosts turn? <span class='isHostsTurn'></span></p>
+		</div>
 		<div>
 			<h5>Make a move</h5>
 			Row:
@@ -104,21 +97,6 @@
 		</div>
 
 	</div>
-
-	<!-- <div>
-		<h3>Print the board</h3>
-		<button onclick="getBoardArray();" id="button">Print Board</button>
-	</div> -->
-
-
-
-
-	<!-- <div>
-			<h3>Show current board</h3>
-			<button onclick="refreshBoard();" id="button">Refresh Board</button>
-	</div> -->
-
-
 </body>
 
 </html>
