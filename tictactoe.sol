@@ -3,7 +3,7 @@ pragma solidity ^0.4.21;
 contract TicTacToe
 {
     event Error(string error);
-    event GameOver(string whoWon, string message);
+    event GameOver(string whoWon);
     uint constant pot = 5 ether;
     
     modifier rightAmountPaid { 
@@ -60,6 +60,7 @@ contract TicTacToe
                 {
                     host.transfer(pot/2);
                     g.opponent.transfer(pot/2);
+                    emit GameOver("tie");
                     clearBoard(host);
                     return;
                 }
@@ -68,10 +69,12 @@ contract TicTacToe
                 {
                     if(player == 1){
                         host.transfer(2*pot);
+                        emit GameOver("host");
                     }else{
-                        g.opponent.transfer(2*pot);                        
+                        g.opponent.transfer(2*pot); 
+                        emit GameOver("opponent");
                     }
-                    message = "you won! the amount was paid to your address";
+                    
                     clearBoard(host);
                     return;
                 }
