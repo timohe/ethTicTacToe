@@ -48,7 +48,7 @@ contract TicTacToe
         }else{player = 2;}
         
         if(g.isHostsTurn && player != 1 || !g.isHostsTurn && player == 1){
-            message = "Its not your turn! Wait until your opponent makes his or her turn";
+            emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
             if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0)
@@ -66,9 +66,9 @@ contract TicTacToe
                 if(youWon(host))
                 {
                     if(player == 1){
-                        host.transfer(pot);
+                        host.transfer(2*pot);
                     }else{
-                        g.opponent.transfer(pot);                        
+                        g.opponent.transfer(2*pot);                        
                     }
                     message = "you won! the amount was paid to your address";
                     clearBoard(host);
