@@ -67,6 +67,15 @@ var contractAbi = [
 		"type": "function"
 	},
 	{
+		"constant": false,
+		"inputs": [],
+		"name": "triggerEvent",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [
 			{
@@ -132,6 +141,7 @@ setAddressArrayAndInit();
 
 
 
+
 window.onload = function () {
 	//listen for changes in contract field
 	var elem = document.getElementById("contractAddress");
@@ -140,6 +150,28 @@ window.onload = function () {
 		console.log("Address set as: " + contractAddr);
 		contract = new web3.eth.Contract(contractAbi, contractAddr);
 	}, true);
+}
+
+function startLoggingEvents() {
+	console.log("started event logging...");
+	contract.events.Error({}, function(error, event){ console.log(event); })
+}
+
+function testEvent() {
+	console.log("Testing event...");
+	contract.methods.triggerEvent().send({ from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61"})
+		.on('receipt', function (receipt) {
+			console.log(receipt);
+			if(receipt.events && receipt.events.Error && receipt.events.Error.returnValues){
+				console.log("Message should be here:"+receipt.events.Error.returnValues[0]);
+			}
+			
+		})
+		.on('error', function (error) {
+			var savedError = error;
+			console.log("This is the error: " + JSON.stringify(savedError));
+		})
+
 }
 
 function setAddressArrayAndInit() {
@@ -192,8 +224,8 @@ function host() {
 
 function joinExistingGame() {
 	hostAddress = document.getElementById("hostAddress").value;
-	console.log("This is the host address to join: "+JSON.stringify(hostAddress));
-	
+	console.log("This is the host address to join: " + JSON.stringify(hostAddress));
+
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact })
@@ -214,10 +246,22 @@ function makeMove() {
 }
 
 function play(row, col) {
-	console.log("Making move...");
+	console.log("Making move...from address" + userAddress);
 	contract.methods.play(hostAddress, row, col).send({ from: userAddress })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
+			if(receipt.events && receipt.events.GameOver && receipt.events.GameOver.returnValues){
+				if(receipt.events.GameOver.returnValues[0] === "host"){
+					alert("The host won the game! He got the pot money");
+				}
+				if(receipt.events.GameOver.returnValues[0] === "opponent"){
+					alert("The opponent won the game! He got the pot money");
+				}
+				if(receipt.events.GameOver.returnValues[0] === "tie"){
+					alert("Game is over. Nobody won so you both got your money back");
+				}
+				alert("The game is over! The winner is:"+receipt.events.GameOver.returnValues[0]+"The pot was sent to the winner");
+			}
 			refreshBoard();
 		})
 		.on('error', function (error) {

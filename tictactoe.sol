@@ -24,9 +24,17 @@ contract TicTacToe
     
     mapping (address => Game) games;
     
+    function triggerEvent() public
+    {
+        emit GameOver("This is an event");
+    }
+    
+    
     function hostNewGame() payable rightAmountPaid public
     {
+
         Game storage g = games[msg.sender];
+        clearBoard(msg.sender);
         g.isHostsTurn = true;
         emit Error("successfully hosted Game!");
     }
@@ -65,7 +73,7 @@ contract TicTacToe
                     host.transfer(pot/2);
                     g.opponent.transfer(pot/2);
                     emit GameOver("tie");
-                    clearBoard(host);
+                    //clearBoard(host);
                     return;
                 }
                 
@@ -79,7 +87,7 @@ contract TicTacToe
                         emit GameOver("opponent");
                     }
                     
-                    clearBoard(host);
+                    //clearBoard(host);
                     return;
                 }
                 g.isHostsTurn = !g.isHostsTurn;
