@@ -139,7 +139,6 @@ window.onload = function () {
 		contractAddr = document.getElementById("contractAddress").value;
 		console.log("Address set as: " + contractAddr);
 		contract = new web3.eth.Contract(contractAbi, contractAddr);
-		watchForGameOverEvents();
 	}, true);
 }
 
@@ -177,7 +176,7 @@ function watchForGameOverEvents() {
 };
 
 function host() {
-	console.log("Hosting new game using address: " + userAddress + " ...");
+	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact })
 		.on('receipt', function (receipt) {
@@ -192,10 +191,12 @@ function host() {
 };
 
 function joinExistingGame() {
-	hostAddress = document.getElementById("hostAddress");
+	hostAddress = document.getElementById("hostAddress").value;
+	console.log("This is the host address to join: "+JSON.stringify(hostAddress));
+	
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
-	contract.methods.joinExistingGame(hostAddress).send({ from: web3.eth.accounts[0], value: valueToTransact })
+	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 			refreshBoard();
@@ -247,7 +248,7 @@ function refreshBoard() {
 			document.querySelector('.field7').innerHTML = boardArray[6];
 			document.querySelector('.field8').innerHTML = boardArray[7];
 			document.querySelector('.field9').innerHTML = boardArray[8];
-			document.querySelector('.isHostsTurn').innerHTML = result.isHostsTurn;
+			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			console.log(JSON.stringify(result));
 		});
 };

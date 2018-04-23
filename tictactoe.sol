@@ -52,8 +52,6 @@ contract TicTacToe
         } else{
            emit Error("You are not part of this game"); 
         }
-        
-        
         if(g.isHostsTurn && player != 1 || !g.isHostsTurn && player == 1){
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
