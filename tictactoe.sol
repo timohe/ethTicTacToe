@@ -3,6 +3,7 @@ pragma solidity ^0.4.21;
 contract TicTacToe
 {
     event Error(string error);
+    event GameOver(string whoWon, string message);
     uint constant pot = 5 ether;
     
     modifier rightAmountPaid { 
