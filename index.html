@@ -6,99 +6,118 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
 	<title>Super Smart Contract .... not</title>
-	
+
 	<!-- Compiled and minified CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
 	<link rel="stylesheet" type="text/css" href="boardstyle.css">
-    <!-- Compiled and minified JavaScript -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
+	<!-- Compiled and minified JavaScript -->
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/js/materialize.min.js"></script>
 	<script src="https://cdn.rawgit.com/ethereum/web3.js/1.0/dist/web3.min.js"></script>
 	<script src="tictactoe.js"></script>
 </head>
 
 <body>
-	<table>
-		<tr>
-			<td>
-				<div class="content">1</div>
-			</td>
-			<td>
-				<div class="content">1</div>
-			</td>
-			<td>
-				<div class="content">1</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="content">1</div>
-			</td>
-			<td>
-				<div class="content">1</div>
-			</td>
-			<td>
-				<div class="content">1</div>
-			</td>
-		</tr>
-		<tr>
-			<td>
-				<div class="content">1</div>
-			</td>
-			<td>
-				<div class="content">1</div>
-			</td>
-			<td>
-				<div class="content">1</div>
-			</td>
-		</tr>
-		<table>
 
-	<div>
-		current address: 0x788e18a8839d40e146191ef0eebe37aac10d511d
-	</div>
-	<div>
-		<h5>Contract Address (will be hardcoded if deployed final version)</h5>
-		<input name="contractAddress" id="contractAddress" type="text">
-		<button class="waves-effect waves-light btn" onclick="setContractAddress();" id="button">Set Contract Address</button>
+	current address: 0x788e18a8839d40e146191ef0eebe37aac10d511d
+
+	<div class="card-panel">
+		<h4>Set up</h4>
+
+		<div class="input-field col s6">
+			<input name="contractAddress" id="contractAddress" type="text" class="validate">
+			<label for="contractAddress">Contract Address (hardcode later)</label>
+		</div>
+		<div>
+			<label>Select your Account</label>
+
+			<select class="browser-default" onchange="changeUserAddress()" id='addressDropdown'></select>
+			</select>
+		</div>
+
+
+
+
+		<!-- <select onchange="changeUserAddress()" id='addressDropdown'></select> -->
 	</div>
 
-	<div>
-		<h5>Select your Account</h5>
-		<select onchange="changeUserAddress()" id='addressDropdown'></select>
-	</div>
 
-	<h5>Host a new game</h5>
-	<button class="waves-effect waves-light btn" onclick="host();" id="button">Host new game</button>
+	<div class="card-panel">
+		<h4>Host or Join a game</h4>
 
-	<!-- <h2 id="instructor"></h2> -->
+		<div class="input-field col s6">
+			<input name="hostAddress" id="hostAddress" type="text" class="validate">
+			<label for="hostAddress">Host address to join</label>
+		</div>
 
-	<div>
-		<h5>Hosts address to join game</h5>
-		<input name="hostAddress" id="hostAddress" type="text">
 		<button class="waves-effect waves-light btn" onclick="join();" id="button">Join hosted game</button>
-
+		<button class="waves-effect waves-light btn" onclick="host();" id="button">Host new game</button>
 	</div>
 
+
+
+
+	<div class="card-panel">
+		<h4>Play!</h4>
+
+
+		<table>
+			<tr>
+				<td>
+					<div class="content">1</div>
+				</td>
+				<td>
+					<div class="content">1</div>
+				</td>
+				<td>
+					<div class="content">1</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="content">1</div>
+				</td>
+				<td>
+					<div class="content">1</div>
+				</td>
+				<td>
+					<div class="content">1</div>
+				</td>
+			</tr>
+			<tr>
+				<td>
+					<div class="content">1</div>
+				</td>
+				<td>
+					<div class="content">1</div>
+				</td>
+				<td>
+					<div class="content">1</div>
+				</td>
+			</tr>
+		</table>
+		<div>
+			<h5>Make a move</h5>
+			Row:
+			<input id="moveRow" type="number"> Column:
+			<input id="moveColumn" type="number">
+			<button class="waves-effect waves-light btn" onclick="makeMove();" id="button">Make move</button>
+		</div>
+
+	</div>
 
 	<!-- <div>
 		<h3>Print the board</h3>
 		<button onclick="getBoardArray();" id="button">Print Board</button>
 	</div> -->
 
-	<div>
-		<h5>Make a move</h5>
-		Row:
-		<input id="moveRow" type="number"> Column:
-		<input id="moveColumn" type="number">
-		<button class="waves-effect waves-light btn" onclick="makeMove();" id="button">Make move</button>
-	</div>
-	
+
+
 
 	<!-- <div>
 			<h3>Show current board</h3>
 			<button onclick="refreshBoard();" id="button">Refresh Board</button>
 	</div> -->
-		
+
 
 </body>
 

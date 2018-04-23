@@ -131,8 +131,21 @@ function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
 	console.log("User address changed to: " + userAddress);
 }
+window.onload = function () {
+	var elem = document.getElementById("contractAddress");
+	elem.addEventListener("blur", function (event) {
+		contractAddr = document.getElementById("contractAddress").value;
+		console.log("Address set as: " + contractAddr);
+		contract = new web3.eth.Contract(contractAbi, contractAddr);
+	}, true);
+}
+
+
+
+
 
 function setContractAddress() {
+
 	contractAddr = document.getElementById("contractAddress").value;
 	console.log("Address set as: " + contractAddr);
 	contract = new web3.eth.Contract(contractAbi, contractAddr);
@@ -142,9 +155,9 @@ function host() {
 	console.log("Hosting new game using address: " + userAddress + " ...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact })
-		.on('receipt', function (receipt) { 
+		.on('receipt', function (receipt) {
 			console.log(receipt);
-			refreshBoard(); 
+			refreshBoard();
 		})
 		.on('error', function (error) {
 			var savedError = error;
@@ -158,9 +171,9 @@ function joinExistingGame() {
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.joinExistingGame(hostAdr).send({ from: web3.eth.accounts[0], value: valueToTransact })
-		.on('receipt', function (receipt) { 
+		.on('receipt', function (receipt) {
 			console.log(receipt);
-			refreshBoard(); 
+			refreshBoard();
 		})
 		.on('error', function (error) {
 			var savedError = error;
@@ -176,10 +189,10 @@ function makeMove() {
 
 function play(hostAdr, row, col) {
 	console.log("Making move...");
-	contract.methods.play(hostAddress, row, col).send({ from: userAddress})
-		.on('receipt', function (receipt) { 
+	contract.methods.play(hostAddress, row, col).send({ from: userAddress })
+		.on('receipt', function (receipt) {
 			console.log(receipt);
-			refreshBoard(); 
+			refreshBoard();
 		})
 		.on('error', function (error) {
 			var savedError = error;
