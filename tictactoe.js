@@ -252,10 +252,10 @@ function play(row, col) {
 			console.log(receipt);
 			if(receipt.events && receipt.events.GameOver && receipt.events.GameOver.returnValues){
 				if(receipt.events.GameOver.returnValues[0] === "host"){
-					alert("The host won the game! He got the pot money");
+					alert("Game is over. The host won the game! He got the pot money");
 				}
 				if(receipt.events.GameOver.returnValues[0] === "opponent"){
-					alert("The opponent won the game! He got the pot money");
+					alert("Game is over. The opponent won the game! He got the pot money");
 				}
 				if(receipt.events.GameOver.returnValues[0] === "tie"){
 					alert("Game is over. Nobody won so you both got your money back");

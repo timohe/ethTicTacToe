@@ -38,3 +38,6 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 `$ npm install -g remixd`   
 `$ remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.`   
 click on the connect button with remix 
+
+## Issues
+`Unhandled rejection Error: Couldn't decode bool from ABI: 0x`means you forgot to deploy the contract, prob set remix to Javascript VM

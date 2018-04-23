@@ -30,13 +30,13 @@ contract TicTacToe
     }
     
     
+    
     function hostNewGame() payable rightAmountPaid public
     {
-
         Game storage g = games[msg.sender];
-        clearBoard(msg.sender);
         g.isHostsTurn = true;
         emit Error("successfully hosted Game!");
+        clearBoard(msg.sender);
     }
     
     function joinExistingGame(address host) payable rightAmountPaid public
@@ -126,22 +126,18 @@ contract TicTacToe
         }
     }
     
-    function removeGame(address host) public returns (string message)
-    {
-        delete games[host];
-        message = "game was deleted";
-    }
-
-    function clearBoard(address host) internal
+    function clearBoard(address host) public
     {
         Game storage g = games[host];
-        g.opponent = 0;
-           
-        for(uint row; row < 3; row++){
-            for(uint col; col < 3; col++){
-                g.board[row][col] = 0;
-            }
-        }
+        g.board[0][0] = 0;
+        g.board[0][1] = 0;
+        g.board[0][2] = 0;
+        g.board[1][0] = 0;
+        g.board[1][1] = 0;
+        g.board[1][2] = 0;
+        g.board[2][0] = 0;
+        g.board[2][1] = 0;
+        g.board[2][2] = 0;
     }
     
     function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
