@@ -3,29 +3,31 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 var contractAddr; //TODO: hardcode this address for presentation
 var contractAbi = [
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "error",
-				"type": "string"
-			}
-		],
-		"name": "Error",
-		"type": "event"
-	},
-	{
 		"constant": false,
 		"inputs": [],
 		"name": "hostNewGame",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "host",
+				"type": "address"
+			}
+		],
+		"name": "removeGame",
 		"outputs": [
 			{
 				"name": "message",
 				"type": "string"
 			}
 		],
-		"payable": true,
-		"stateMutability": "payable",
+		"payable": false,
+		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
@@ -59,18 +61,13 @@ var contractAbi = [
 			}
 		],
 		"name": "play",
-		"outputs": [
-			{
-				"name": "message",
-				"type": "string"
-			}
-		],
+		"outputs": [],
 		"payable": false,
 		"stateMutability": "nonpayable",
 		"type": "function"
 	},
 	{
-		"constant": false,
+		"constant": true,
 		"inputs": [
 			{
 				"name": "host",
@@ -80,7 +77,7 @@ var contractAbi = [
 		"name": "printBoard",
 		"outputs": [
 			{
-				"name": "isHostsTurn",
+				"name": "_isHostsTurn",
 				"type": "bool"
 			},
 			{
@@ -97,8 +94,32 @@ var contractAbi = [
 			}
 		],
 		"payable": false,
-		"stateMutability": "nonpayable",
+		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "error",
+				"type": "string"
+			}
+		],
+		"name": "Error",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "whoWon",
+				"type": "string"
+			}
+		],
+		"name": "GameOver",
+		"type": "event"
 	}
 ]
 var contract;
@@ -109,6 +130,8 @@ var boardArray = [];
 setAddressArrayAndInit();
 
 
+
+
 window.onload = function () {
 	//listen for changes in contract field
 	var elem = document.getElementById("contractAddress");
@@ -116,6 +139,7 @@ window.onload = function () {
 		contractAddr = document.getElementById("contractAddress").value;
 		console.log("Address set as: " + contractAddr);
 		contract = new web3.eth.Contract(contractAbi, contractAddr);
+		watchForGameOverEvents();
 	}, true);
 }
 
@@ -142,11 +166,15 @@ function changeUserAddress() {
 	console.log("User address changed to: " + userAddress);
 }
 
-function setContractAddress() {
-	contractAddr = document.getElementById("contractAddress").value;
-	console.log("Address set as: " + contractAddr);
-	contract = new web3.eth.Contract(contractAbi, contractAddr);
-}
+function watchForGameOverEvents() {
+	console.log("started watching for GameOverEvents...");
+	var event = contract.GameOver();
+	// http://solidity.readthedocs.io/en/latest/contracts.html#events
+	event.watch(function (error, result) {
+		if (!error)
+			console.log(result);
+	})
+};
 
 function host() {
 	console.log("Hosting new game using address: " + userAddress + " ...");
@@ -164,9 +192,10 @@ function host() {
 };
 
 function joinExistingGame() {
+	hostAddress = document.getElementById("hostAddress");
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
-	contract.methods.joinExistingGame(hostAdr).send({ from: web3.eth.accounts[0], value: valueToTransact })
+	contract.methods.joinExistingGame(hostAddress).send({ from: web3.eth.accounts[0], value: valueToTransact })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 			refreshBoard();
@@ -180,10 +209,10 @@ function joinExistingGame() {
 function makeMove() {
 	var _row = document.getElementById("moveRow").value;
 	var _col = document.getElementById("moveColumn").value;
-	play(hostAddress, _row, _col);
+	play(_row, _col);
 }
 
-function play(hostAdr, row, col) {
+function play(row, col) {
 	console.log("Making move...");
 	contract.methods.play(hostAddress, row, col).send({ from: userAddress })
 		.on('receipt', function (receipt) {

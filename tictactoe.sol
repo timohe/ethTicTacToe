@@ -41,12 +41,18 @@ contract TicTacToe
         emit Error("successfully joined Game!");
     }
     
-    function play(address host, uint row, uint column) public returns (string message){
+    function play(address host, uint row, uint column) public{
         Game storage g = games[host];
         uint player;
         if(msg.sender == host){
             player = 1;
-        }else{player = 2;}
+        }
+        else if(msg.sender == g.opponent){
+            player = 2;
+        } else{
+           emit Error("You are not part of this game"); 
+        }
+        
         
         if(g.isHostsTurn && player != 1 || !g.isHostsTurn && player == 1){
             emit Error("Its not your turn! Wait for your opponent to play");
