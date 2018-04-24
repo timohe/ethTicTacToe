@@ -1,4 +1,4 @@
-pragma solidity ^0.4.21;
+pragma solidity ^0.4.23;
 
 contract TicTacToe
 {
@@ -36,7 +36,6 @@ contract TicTacToe
         Game storage g = games[msg.sender];
         g.isHostsTurn = true;
         emit Error("successfully hosted Game!");
-        clearBoard(msg.sender);
     }
     
     function joinExistingGame(address host) payable rightAmountPaid public
@@ -58,7 +57,7 @@ contract TicTacToe
         else if(msg.sender == g.opponent){
             player = 2;
         } else{
-           emit Error("You are not part of this game"); 
+            emit Error("You are not part of this game"); 
         }
         if(g.isHostsTurn && player != 1 || !g.isHostsTurn && player == 1){
             emit Error("Its not your turn! Wait for your opponent to play");
@@ -138,6 +137,8 @@ contract TicTacToe
         g.board[2][0] = 0;
         g.board[2][1] = 0;
         g.board[2][2] = 0;
+        g.opponent = 0;
+        g.isHostsTurn = true;
     }
     
     function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)

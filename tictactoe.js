@@ -4,30 +4,49 @@ var contractAddr; //TODO: hardcode this address for presentation
 var contractAbi = [
 	{
 		"constant": false,
-		"inputs": [],
-		"name": "hostNewGame",
-		"outputs": [],
-		"payable": true,
-		"stateMutability": "payable",
-		"type": "function"
-	},
-	{
-		"constant": false,
 		"inputs": [
 			{
 				"name": "host",
 				"type": "address"
 			}
 		],
-		"name": "removeGame",
-		"outputs": [
+		"name": "clearBoard",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
 			{
-				"name": "message",
+				"indexed": false,
+				"name": "error",
 				"type": "string"
 			}
 		],
-		"payable": false,
-		"stateMutability": "nonpayable",
+		"name": "Error",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "whoWon",
+				"type": "string"
+			}
+		],
+		"name": "GameOver",
+		"type": "event"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "hostNewGame",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
 		"type": "function"
 	},
 	{
@@ -105,30 +124,6 @@ var contractAbi = [
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "error",
-				"type": "string"
-			}
-		],
-		"name": "Error",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "whoWon",
-				"type": "string"
-			}
-		],
-		"name": "GameOver",
-		"type": "event"
 	}
 ]
 var contract;
@@ -152,27 +147,27 @@ window.onload = function () {
 	}, true);
 }
 
-function startLoggingEvents() {
-	console.log("started event logging...");
-	contract.events.Error({}, function(error, event){ console.log(event); })
-}
+// function startLoggingEvents() {
+// 	console.log("started event logging...");
+// 	contract.events.Error({}, function(error, event){ console.log(event); })
+// }
 
-function testEvent() {
-	console.log("Testing event...");
-	contract.methods.triggerEvent().send({ from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61"})
-		.on('receipt', function (receipt) {
-			console.log(receipt);
-			if(receipt.events && receipt.events.Error && receipt.events.Error.returnValues){
-				console.log("Message should be here:"+receipt.events.Error.returnValues[0]);
-			}
-			
-		})
-		.on('error', function (error) {
-			var savedError = error;
-			console.log("This is the error: " + JSON.stringify(savedError));
-		})
+// function testEvent() {
+// 	console.log("Testing event...");
+// 	contract.methods.triggerEvent().send({ from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61"})
+// 		.on('receipt', function (receipt) {
+// 			console.log(receipt);
+// 			if(receipt.events && receipt.events.Error && receipt.events.Error.returnValues){
+// 				console.log("Message should be here:"+receipt.events.Error.returnValues[0]);
+// 			}
 
-}
+// 		})
+// 		.on('error', function (error) {
+// 			var savedError = error;
+// 			console.log("This is the error: " + JSON.stringify(savedError));
+// 		})
+
+// }
 
 function setAddressArrayAndInit() {
 	web3.eth.getAccounts().then(function (result) {
@@ -212,6 +207,7 @@ function host() {
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact })
 		.on('receipt', function (receipt) {
+			console.log("Transaction successfull, receipt:")
 			console.log(receipt);
 			refreshBoard();
 		})
@@ -250,23 +246,35 @@ function play(row, col) {
 	contract.methods.play(hostAddress, row, col).send({ from: userAddress })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
-			if(receipt.events && receipt.events.GameOver && receipt.events.GameOver.returnValues){
-				if(receipt.events.GameOver.returnValues[0] === "host"){
+			if (receipt.events && receipt.events.GameOver && receipt.events.GameOver.returnValues) {
+				if (receipt.events.GameOver.returnValues[0] === "host") {
 					alert("Game is over. The host won the game! He got the pot money");
 				}
-				if(receipt.events.GameOver.returnValues[0] === "opponent"){
+				if (receipt.events.GameOver.returnValues[0] === "opponent") {
 					alert("Game is over. The opponent won the game! He got the pot money");
 				}
-				if(receipt.events.GameOver.returnValues[0] === "tie"){
+				if (receipt.events.GameOver.returnValues[0] === "tie") {
 					alert("Game is over. Nobody won so you both got your money back");
 				}
-				alert("The game is over! The winner is:"+receipt.events.GameOver.returnValues[0]+"The pot was sent to the winner");
+				alert("The game is over! The winner is:" + receipt.events.GameOver.returnValues[0] + "The pot was sent to the winner");
 			}
 			refreshBoard();
 		})
 		.on('error', function (error) {
 			var savedError = error;
 			console.log("This is the error: " + JSON.stringify(savedError));
+		})
+};
+
+function clearBoard() {
+	console.log("Clearing board...from address"+hostAddress);
+	contract.methods.clearBoard(hostAddress).send({ from: userAddress })
+		.on('receipt', function (receipt) {
+			console.log(receipt);
+		})
+		.on('error', function (error) {
+			var savedError = error;
+			console.log("This is the error when clearing the board: " + JSON.stringify(savedError));
 		})
 };
 
@@ -294,5 +302,14 @@ function refreshBoard() {
 			document.querySelector('.field9').innerHTML = boardArray[8];
 			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			console.log(JSON.stringify(result));
+		});
+};
+
+function printBoard() {
+	console.log("Refreshing board...");
+	contract.methods.printBoard(hostAddress).call()
+		.then(function (result) {
+			console.log(JSON.stringify(result));
+			console.log("This should be hosts address: " + hostAddress);
 		});
 };
