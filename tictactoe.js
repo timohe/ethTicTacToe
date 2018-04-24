@@ -133,10 +133,6 @@ var hostAddress;
 var boardArray = [];
 setAddressArrayAndInit();
 
-
-
-
-
 window.onload = function () {
 	//listen for changes in contract field
 	var elem = document.getElementById("contractAddress");
@@ -146,28 +142,6 @@ window.onload = function () {
 		contract = new web3.eth.Contract(contractAbi, contractAddr);
 	}, true);
 }
-
-// function startLoggingEvents() {
-// 	console.log("started event logging...");
-// 	contract.events.Error({}, function(error, event){ console.log(event); })
-// }
-
-// function testEvent() {
-// 	console.log("Testing event...");
-// 	contract.methods.triggerEvent().send({ from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61"})
-// 		.on('receipt', function (receipt) {
-// 			console.log(receipt);
-// 			if(receipt.events && receipt.events.Error && receipt.events.Error.returnValues){
-// 				console.log("Message should be here:"+receipt.events.Error.returnValues[0]);
-// 			}
-
-// 		})
-// 		.on('error', function (error) {
-// 			var savedError = error;
-// 			console.log("This is the error: " + JSON.stringify(savedError));
-// 		})
-
-// }
 
 function setAddressArrayAndInit() {
 	web3.eth.getAccounts().then(function (result) {
@@ -192,15 +166,7 @@ function changeUserAddress() {
 	console.log("User address changed to: " + userAddress);
 }
 
-function watchForGameOverEvents() {
-	console.log("started watching for GameOverEvents...");
-	var event = contract.GameOver();
-	// http://solidity.readthedocs.io/en/latest/contracts.html#events
-	event.watch(function (error, result) {
-		if (!error)
-			console.log(result);
-	})
-};
+
 
 function host() {
 	console.log("Hosting new game...");
@@ -305,11 +271,34 @@ function refreshBoard() {
 		});
 };
 
-function printBoard() {
-	console.log("Refreshing board...");
-	contract.methods.printBoard(hostAddress).call()
-		.then(function (result) {
-			console.log(JSON.stringify(result));
-			console.log("This should be hosts address: " + hostAddress);
-		});
-};
+// function startLoggingEvents() {
+// 	console.log("started event logging...");
+// 	contract.events.Error({}, function(error, event){ console.log(event); })
+// }
+
+// function testEvent() {
+// 	console.log("Testing event...");
+// 	contract.methods.triggerEvent().send({ from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61"})
+// 		.on('receipt', function (receipt) {
+// 			console.log(receipt);
+// 			if(receipt.events && receipt.events.Error && receipt.events.Error.returnValues){
+// 				console.log("Message should be here:"+receipt.events.Error.returnValues[0]);
+// 			}
+
+// 		})
+// 		.on('error', function (error) {
+// 			var savedError = error;
+// 			console.log("This is the error: " + JSON.stringify(savedError));
+// 		})
+
+// }
+
+// function watchForGameOverEvents() {
+// 	console.log("started watching for GameOverEvents...");
+// 	var event = contract.GameOver();
+// 	// http://solidity.readthedocs.io/en/latest/contracts.html#events
+// 	event.watch(function (error, result) {
+// 		if (!error)
+// 			console.log(result);
+// 	})
+// };
