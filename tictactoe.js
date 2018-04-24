@@ -150,6 +150,7 @@ function setAddressArrayAndInit() {
 		userAddress = userAddressesArray[0]
 	});
 }
+
 function populateAddressDropdown() {
 	var addressItems = document.getElementById("addressDropdown");
 	itemArray = userAddressesArray
@@ -161,12 +162,11 @@ function populateAddressDropdown() {
 		addressItems.appendChild(el);
 	}
 }
+
 function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
 	console.log("User address changed to: " + userAddress);
 }
-
-
 
 function host() {
 	console.log("Hosting new game...");
@@ -182,7 +182,7 @@ function host() {
 			console.log("This is the error: " + JSON.stringify(savedError));
 		})
 	hostAddress = userAddress;
-};
+}
 
 function joinExistingGame() {
 	hostAddress = document.getElementById("hostAddress").value;
@@ -199,7 +199,7 @@ function joinExistingGame() {
 			var savedError = error;
 			console.log("This is the error: " + JSON.stringify(savedError));
 		})
-};
+}
 
 function makeMove() {
 	var _row = document.getElementById("moveRow").value;
@@ -230,7 +230,7 @@ function play(row, col) {
 			var savedError = error;
 			console.log("This is the error: " + JSON.stringify(savedError));
 		})
-};
+}
 
 function clearBoard() {
 	console.log("Clearing board...from address"+hostAddress);
@@ -242,7 +242,7 @@ function clearBoard() {
 			var savedError = error;
 			console.log("This is the error when clearing the board: " + JSON.stringify(savedError));
 		})
-};
+}
 
 function refreshBoard() {
 	console.log("Refreshing board...");
@@ -269,7 +269,7 @@ function refreshBoard() {
 			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			console.log(JSON.stringify(result));
 		});
-};
+}
 
 // function startLoggingEvents() {
 // 	console.log("started event logging...");
