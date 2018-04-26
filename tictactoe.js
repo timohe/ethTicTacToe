@@ -101,6 +101,44 @@ var contractAbi = [
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
+	},
+    {
+		"constant": true,
+		"inputs": [
+			{
+				"name": "host",
+				"type": "address"
+			}
+		],
+		"name": "getGameState",
+		"outputs": [
+            {   "name": "_opponent",
+                "type": "address"
+            },
+			{
+				"name": "_isHostsTurn",
+				"type": "bool"
+			},
+            {
+                "name": "_turnNr",
+                "type": "uint256"
+            },
+			{
+				"name": "_board1",
+				"type": "uint256"
+			},
+			{
+				"name": "_board2",
+				"type": "uint256"
+			},
+			{
+				"name": "_board3",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	}
 ];
 
@@ -198,7 +236,8 @@ function joinExistingGame() {
 			refreshBoard();
 		})
 		.on('error', function (error) {
-			console.log("This is the error: " + JSON.stringify(error));
+			console.log("This is the error: ");
+			console.log(error);
 		})
     isRefreshPaused=false;
 };
@@ -225,7 +264,8 @@ function play(row, col) {
 			refreshBoard();
 		})
 		.on('error', function (error) {
-			console.log("This is the error: " + JSON.stringify(error));
+			console.log("This is the error: ");
+			console.log(error);
 		})
 }
 
@@ -288,4 +328,11 @@ function cellClick(cell) {
         play(3,3);
 
     }
+}
+
+function printGameState() {
+    contract.methods.getGameState(hostAddress).call()
+        .then(function (result) {
+            console.log(result);
+        })
 }

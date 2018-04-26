@@ -2,6 +2,7 @@ pragma solidity ^0.4.23;
 
 contract TicTacToe
 {
+    event Log(string log);
     event Error(string error);
     event GameOver(string whoWon);
     uint constant pot = 5 ether;
@@ -28,8 +29,10 @@ contract TicTacToe
     {
         Game storage g = games[msg.sender];
         g.isHostsTurn = true;
+        g.turnNr = 0;
+        g.opponent = 0;
         clearBoard(msg.sender);
-        emit Error("successfully hosted Game!");
+        emit Log("successfully hosted Game!");
     }
 
     function joinExistingGame(address host) payable rightAmountPaid public
@@ -39,21 +42,23 @@ contract TicTacToe
         {
             g.opponent = msg.sender;
         }
-        emit Error("successfully joined Game!");
+        emit Log("successfully joined Game!");
     }
 
     function play(address host, uint row, uint column) public{
         Game storage g = games[host];
         uint player;
         if(msg.sender == host){
+            emit Log("executing move for host");
             player = 1;
         }
         else if(msg.sender == g.opponent){
+            emit Log("executing move for opponent");
             player = 2;
         } else{
             emit Error("You are not part of this game");
         }
-        if(g.isHostsTurn && player != 1 || !g.isHostsTurn && player == 1){
+        if((g.isHostsTurn && player != 1) || (!g.isHostsTurn && player == 1)){
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
@@ -70,8 +75,6 @@ contract TicTacToe
                         g.opponent.transfer(2*pot);
                         emit GameOver("opponent won");
                     }
-
-                    //clearBoard(host);
                     return;
                 }
 
@@ -80,13 +83,14 @@ contract TicTacToe
                     host.transfer(pot/2);
                     g.opponent.transfer(pot/2);
                     emit GameOver("tie");
-                    //clearBoard(host);
                     return;
                 }
 
-
+                emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
                 g.turnNr ++;
+            } else {
+                emit Error("Please enter a valid field");
             }
         }
     }
@@ -120,6 +124,16 @@ contract TicTacToe
         }
     }
 
+    function getGameState(address host) public view returns (address _opponent, bool _isHostsTurn, uint _turnNr, uint _board1, uint _board2, uint _board3) {
+        Game storage g = games[host];
+        _opponent = g.opponent;
+        _isHostsTurn = g.isHostsTurn;
+        _turnNr = g.turnNr;
+        _board1 = (999000 + 100 * (g.board[0][0])) + (10 * (g.board[0][1])) + (g.board[0][2]);
+        _board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
+        _board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
+    }
+
     function clearBoard(address host) internal
     {
         Game storage g = games[host];
@@ -144,4 +158,16 @@ contract TicTacToe
         board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
         _isHostsTurn = g.isHostsTurn;
     }
+
+//    function toString(uint integer) internal view returns (string convString) {
+//        byte32 byties = bytes32(integer);
+//        bytes memory bytesString = new bytes(32);
+//        for (uint j=0; j<32; j++) {
+//            byte char = byte(bytes32(uint(byties) * 2 ** (8 * j)));
+//            if (char != 0) {
+//                bytesString[j] = char;
+//            }
+//        }
+//        return string(bytesString);
+//    }
 }
