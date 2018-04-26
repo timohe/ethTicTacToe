@@ -90,7 +90,6 @@ contract TicTacToe
                 emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
                 return;
-                }
 
                 g.isHostsTurn = !g.isHostsTurn;
                 g.turnNr ++;
