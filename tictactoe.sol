@@ -1,10 +1,10 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.21;
 
 contract TicTacToe
 {
     event Error(string error);
     event GameOver(string whoWon);
-    uint constant pot = 5 ether;
+    uint constant pot = 0 ether;
 
     modifier rightAmountPaid {
         if(msg.value != pot){
@@ -52,8 +52,9 @@ contract TicTacToe
             player = 2;
         } else{
             emit Error("You are not part of this game");
+            return;
         }
-        if(g.isHostsTurn && player != 1 || !g.isHostsTurn && player == 1){
+        if((g.isHostsTurn && player != 1) || (!g.isHostsTurn && player == 1)){
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
@@ -70,8 +71,7 @@ contract TicTacToe
                         g.opponent.transfer(2*pot);
                         emit GameOver("opponent won");
                     }
-
-                    //clearBoard(host);
+                    g.turnNr = 0;
                     return;
                 }
 
@@ -80,13 +80,16 @@ contract TicTacToe
                     host.transfer(pot/2);
                     g.opponent.transfer(pot/2);
                     emit GameOver("tie");
-                    //clearBoard(host);
-                    return;
+                    g.turnNr = 0;
+                    g.isHostsTurn = !g.isHostsTurn;
+                return;
                 }
-
 
                 g.isHostsTurn = !g.isHostsTurn;
                 g.turnNr ++;
+            }
+            else{
+            emit Error("Your choice of field was not valid");
             }
         }
     }
