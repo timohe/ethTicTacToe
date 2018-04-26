@@ -3,20 +3,6 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 var contractAddr; //TODO: hardcode this address for presentation
 var contractAbi = [
 	{
-		"constant": false,
-		"inputs": [
-			{
-				"name": "host",
-				"type": "address"
-			}
-		],
-		"name": "clearBoard",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"anonymous": false,
 		"inputs": [
 			{
@@ -86,15 +72,6 @@ var contractAbi = [
 		"type": "function"
 	},
 	{
-		"constant": false,
-		"inputs": [],
-		"name": "triggerEvent",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [
 			{
@@ -125,7 +102,8 @@ var contractAbi = [
 		"stateMutability": "view",
 		"type": "function"
 	}
-]
+];
+
 var contract;
 var userAddressesArray;
 var userAddress;
@@ -136,11 +114,16 @@ setAddressArrayAndInit();
 window.onload = function () {
 	//listen for changes in contract field
 	var elem = document.getElementById("contractAddress");
-	elem.addEventListener("blur", function (event) {
-		contractAddr = document.getElementById("contractAddress").value;
-		console.log("Address set as: " + contractAddr);
-		contract = new web3.eth.Contract(contractAbi, contractAddr);
-	}, true);
+	elem.addEventListener("blur", getContractAddressSetter(), true);
+	getContractAddressSetter()();
+};
+
+function getContractAddressSetter() {
+	return function () {
+        contractAddr = document.getElementById("contractAddress").value;
+        console.log("Address set as: " + contractAddr);
+        contract = new web3.eth.Contract(contractAbi, contractAddr);
+	}
 }
 
 function setAddressArrayAndInit() {
@@ -148,41 +131,49 @@ function setAddressArrayAndInit() {
 		userAddressesArray = result;
 		populateAddressDropdown();
 		userAddress = userAddressesArray[0]
+	}).catch(function (error) {
+		console.log(error);
 	});
 }
+
 function populateAddressDropdown() {
-	var addressItems = document.getElementById("addressDropdown");
-	itemArray = userAddressesArray
+	itemArray = userAddressesArray;
 	for (var i = 0; i < itemArray.length; i++) {
-		var opt = itemArray[i];
-		var el = document.createElement("option");
-		el.textContent = opt;
-		el.value = opt;
-		addressItems.appendChild(el);
+        var address = itemArray[i];
+        web3.eth.getBalance(address).then(getAddressItemsSetter(address));
 	}
 }
+
+function getAddressItemsSetter(address) {
+	return function (balance) {
+        var addressItems = document.getElementById("addressDropdown");
+        var el = document.createElement("option");
+        var opt = address + ";  bal: " + web3.utils.fromWei(balance);
+        el.textContent = opt;
+        el.value = address;
+        addressItems.appendChild(el);
+    }
+}
+
 function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
 	console.log("User address changed to: " + userAddress);
 }
-
-
 
 function host() {
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact })
 		.on('receipt', function (receipt) {
-			console.log("Transaction successfull, receipt:")
+			console.log("Transaction successfull, receipt:");
 			console.log(receipt);
 			refreshBoard();
 		})
 		.on('error', function (error) {
-			var savedError = error;
-			console.log("This is the error: " + JSON.stringify(savedError));
-		})
+			console.log("This is the error: " + JSON.stringify(error));
+		});
 	hostAddress = userAddress;
-};
+}
 
 function joinExistingGame() {
 	hostAddress = document.getElementById("hostAddress").value;
@@ -196,10 +187,9 @@ function joinExistingGame() {
 			refreshBoard();
 		})
 		.on('error', function (error) {
-			var savedError = error;
-			console.log("This is the error: " + JSON.stringify(savedError));
+			console.log("This is the error: " + JSON.stringify(error));
 		})
-};
+}
 
 function makeMove() {
 	var _row = document.getElementById("moveRow").value;
@@ -227,22 +217,9 @@ function play(row, col) {
 			refreshBoard();
 		})
 		.on('error', function (error) {
-			var savedError = error;
-			console.log("This is the error: " + JSON.stringify(savedError));
+			console.log("This is the error: " + JSON.stringify(error));
 		})
-};
-
-function clearBoard() {
-	console.log("Clearing board...from address"+hostAddress);
-	contract.methods.clearBoard(hostAddress).send({ from: userAddress })
-		.on('receipt', function (receipt) {
-			console.log(receipt);
-		})
-		.on('error', function (error) {
-			var savedError = error;
-			console.log("This is the error when clearing the board: " + JSON.stringify(savedError));
-		})
-};
+}
 
 function refreshBoard() {
 	console.log("Refreshing board...");
@@ -269,36 +246,4 @@ function refreshBoard() {
 			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			console.log(JSON.stringify(result));
 		});
-};
-
-// function startLoggingEvents() {
-// 	console.log("started event logging...");
-// 	contract.events.Error({}, function(error, event){ console.log(event); })
-// }
-
-// function testEvent() {
-// 	console.log("Testing event...");
-// 	contract.methods.triggerEvent().send({ from: "0xc8d52f9dc4ab7fb8920abe7144fec8215fccfe61"})
-// 		.on('receipt', function (receipt) {
-// 			console.log(receipt);
-// 			if(receipt.events && receipt.events.Error && receipt.events.Error.returnValues){
-// 				console.log("Message should be here:"+receipt.events.Error.returnValues[0]);
-// 			}
-
-// 		})
-// 		.on('error', function (error) {
-// 			var savedError = error;
-// 			console.log("This is the error: " + JSON.stringify(savedError));
-// 		})
-
-// }
-
-// function watchForGameOverEvents() {
-// 	console.log("started watching for GameOverEvents...");
-// 	var event = contract.GameOver();
-// 	// http://solidity.readthedocs.io/en/latest/contracts.html#events
-// 	event.watch(function (error, result) {
-// 		if (!error)
-// 			console.log(result);
-// 	})
-// };
+}
