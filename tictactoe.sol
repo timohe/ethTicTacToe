@@ -61,6 +61,20 @@ contract TicTacToe
             {
                 g.board[row][column] = player;
 
+                if(youWon(host))
+                {
+                    if(player == 1){
+                        host.transfer(2*pot);
+                        emit GameOver("host won");
+                    }else{
+                        g.opponent.transfer(2*pot);
+                        emit GameOver("opponent won");
+                    }
+
+                    //clearBoard(host);
+                    return;
+                }
+
                 if(isTie(host))
                 {
                     host.transfer(pot/2);
@@ -70,19 +84,7 @@ contract TicTacToe
                     return;
                 }
 
-                if(youWon(host))
-                {
-                    if(player == 1){
-                        host.transfer(2*pot);
-                        emit GameOver("host");
-                    }else{
-                        g.opponent.transfer(2*pot);
-                        emit GameOver("opponent");
-                    }
 
-                    //clearBoard(host);
-                    return;
-                }
                 g.isHostsTurn = !g.isHostsTurn;
                 g.turnNr ++;
             }
