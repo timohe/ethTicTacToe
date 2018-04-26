@@ -131,7 +131,15 @@ var userAddressesArray;
 var userAddress;
 var hostAddress;
 var boardArray = [];
+var boolArray = [];
 setAddressArrayAndInit();
+var isRefreshPaused = true;
+var answer = setInterval(function() {
+    if(!isRefreshPaused) {
+        refreshBoard();
+    }
+    }, 10000);
+
 
 window.onload = function () {
 	//listen for changes in contract field
@@ -169,6 +177,7 @@ function changeUserAddress() {
 
 
 function host() {
+    isRefreshPaused=true;
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact })
@@ -182,9 +191,11 @@ function host() {
 			console.log("This is the error: " + JSON.stringify(savedError));
 		})
 	hostAddress = userAddress;
+	isRefreshPaused=false;
 };
 
 function joinExistingGame() {
+    isRefreshPaused=true;
 	hostAddress = document.getElementById("hostAddress").value;
 	console.log("This is the host address to join: " + JSON.stringify(hostAddress));
 
@@ -199,16 +210,12 @@ function joinExistingGame() {
 			var savedError = error;
 			console.log("This is the error: " + JSON.stringify(savedError));
 		})
+    isRefreshPaused=false;
 };
-
-function makeMove() {
-	var _row = document.getElementById("moveRow").value;
-	var _col = document.getElementById("moveColumn").value;
-	play(_row, _col);
-}
 
 function play(row, col) {
 	console.log("Making move...from address" + userAddress);
+	isRefreshPaused = true;
 	contract.methods.play(hostAddress, row, col).send({ from: userAddress })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
@@ -224,6 +231,7 @@ function play(row, col) {
 				}
 				alert("The game is over! The winner is:" + receipt.events.GameOver.returnValues[0] + "The pot was sent to the winner");
 			}
+			isRefreshPaused=false;
 			refreshBoard();
 		})
 		.on('error', function (error) {
@@ -257,19 +265,53 @@ function refreshBoard() {
 			boardArray[6] = parseInt(result.board3.substring(3, 4));
 			boardArray[7] = parseInt(result.board3.substring(4, 5));
 			boardArray[8] = parseInt(result.board3.substring(5, 6));
-			document.querySelector('.field1').innerHTML = boardArray[0];
-			document.querySelector('.field2').innerHTML = boardArray[1];
-			document.querySelector('.field3').innerHTML = boardArray[2];
-			document.querySelector('.field4').innerHTML = boardArray[3];
-			document.querySelector('.field5').innerHTML = boardArray[4];
-			document.querySelector('.field6').innerHTML = boardArray[5];
-			document.querySelector('.field7').innerHTML = boardArray[6];
-			document.querySelector('.field8').innerHTML = boardArray[7];
-			document.querySelector('.field9').innerHTML = boardArray[8];
+            for (i = 0; i < boardArray.length; i++) {
+                if (boardArray[i] === 0) {
+                    boolArray[i] = '';
+                }
+                else if(boardArray[i] === 1){
+                    boolArray[i] = 'X';
+                }
+                else{
+                    boolArray[i] = 'O';
+                }
+            }
+			document.querySelector('.field1').innerHTML = boolArray[0];
+			document.querySelector('.field2').innerHTML = boolArray[1];
+			document.querySelector('.field3').innerHTML = boolArray[2];
+			document.querySelector('.field4').innerHTML = boolArray[3];
+			document.querySelector('.field5').innerHTML = boolArray[4];
+			document.querySelector('.field6').innerHTML = boolArray[5];
+			document.querySelector('.field7').innerHTML = boolArray[6];
+			document.querySelector('.field8').innerHTML = boolArray[7];
+			document.querySelector('.field9').innerHTML = boolArray[8];
 			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			console.log(JSON.stringify(result));
 		});
 };
+
+function cellClick(cell) {
+    if (cell.id == "1-1") {
+        play(1,1);
+    } else if (cell.id == "1-2") {
+        play(1,2);
+    } else if (cell.id == "1-3") {
+        play(1,3);
+    } else if (cell.id == "2-1") {
+        play(2,1);
+    } else if (cell.id == "2-2") {
+        play(2,2);
+    } else if (cell.id == "2-3") {
+        play(2,3);
+    } else if (cell.id == "3-1") {
+        play(3,1);
+    } else if (cell.id == "3-2") {
+        play(3,2);
+    } else if (cell.id == "3-3") {
+        play(3,3);
+
+    }
+}
 
 // function startLoggingEvents() {
 // 	console.log("started event logging...");

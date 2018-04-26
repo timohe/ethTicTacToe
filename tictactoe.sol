@@ -66,7 +66,21 @@ contract TicTacToe
             if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0)
             {
                 g.board[row][column] = player;
-                
+
+                if(youWon(host))
+                {
+                    if(player == 1){
+                        host.transfer(2*pot);
+                        emit GameOver("host won");
+                    }else{
+                        g.opponent.transfer(2*pot);
+                        emit GameOver("opponent won");
+                    }
+
+                    //clearBoard(host);
+                    return;
+                }
+
                 if(isTie(host))
                 {
                     host.transfer(pot/2);
@@ -76,19 +90,7 @@ contract TicTacToe
                     return;
                 }
                 
-                if(youWon(host))
-                {
-                    if(player == 1){
-                        host.transfer(2*pot);
-                        emit GameOver("host");
-                    }else{
-                        g.opponent.transfer(2*pot); 
-                        emit GameOver("opponent");
-                    }
-                    
-                    //clearBoard(host);
-                    return;
-                }
+
                 g.isHostsTurn = !g.isHostsTurn;
                 g.turnNr ++;
             }
@@ -148,5 +150,12 @@ contract TicTacToe
         board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
         board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
         _isHostsTurn = g.isHostsTurn;
+    }
+
+    function getPlayers(address host) public view returns (address opp, address host_)
+    {
+        Game storage g = games[host];
+        opp = g.opponent;
+        host_ = host;
     }
 }

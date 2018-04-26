@@ -45,45 +45,42 @@
 		<button class="waves-effect waves-light btn" onclick="host();" id="button">Host new game</button>
 
 		<!-- <button class="waves-effect waves-light btn" onclick="testEvent();" id="button">TEST EVENT</button> -->
-		<button class="waves-effect waves-light btn" onclick="printBoard();" id="button">TEST Printboard</button>
 		<button class="waves-effect waves-light btn" onclick="clearBoard();" id="button">TEST clearBoard</button>
-		<button class="waves-effect waves-light btn" onclick="refreshBoard();" id="button">TEST refreshBoard</button>
-		
 	</div>
 
 	<div class="card-panel">
 		<h4>Play!</h4>
 		<table>
 			<tr>
-				<td>
+				<td id="0-0" onclick="cellClick(this);">
 					<div class="content"><span class='field1'></span></div>
 				</td>
-				<td>
+				<td id="0-1" onclick="cellClick(this);">
 					<div class="content"><span class='field2'></span></div>
 				</td>
-				<td>
+				<td id="0-2" onclick="cellClick(this);">
 					<div class="content"><span class='field3'></span></div>
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td id="1-0" onclick="cellClick(this);">
 					<div class="content"><span class='field4'></span></div>
 				</td>
-				<td>
+				<td id="1-1" onclick="cellClick(this);">
 					<div class="content"><span class='field5'></span></div>
 				</td>
-				<td>
+				<td id="1-2" onclick="cellClick(this);">
 					<div class="content"><span class='field6'></span></div>
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td id="2-0" onclick="cellClick(this);">
 					<div class="content"><span class='field7'></span></div>
 				</td>
-				<td>
+				<td id="2-1" onclick="cellClick(this);">
 					<div class="content"><span class='field8'></span></div>
 				</td>
-				<td>
+				<td id="2-2" onclick="cellClick(this);">
 					<div class="content"><span class='field9'></span></div>
 				</td>
 			</tr>
