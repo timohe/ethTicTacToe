@@ -1,11 +1,11 @@
-pragma solidity ^0.4.23;
+pragma solidity ^0.4.21;
 
 contract TicTacToe
 {
     event Log(string log);
     event Error(string error);
     event GameOver(string whoWon);
-    uint constant pot = 5 ether;
+    uint constant pot = 0 ether;
 
     modifier rightAmountPaid {
         if(msg.value != pot){
@@ -57,6 +57,7 @@ contract TicTacToe
             player = 2;
         } else{
             emit Error("You are not part of this game");
+            return;
         }
         if((g.isHostsTurn && player != 1) || (!g.isHostsTurn && player == 1)){
             emit Error("Its not your turn! Wait for your opponent to play");
@@ -88,9 +89,13 @@ contract TicTacToe
 
                 emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
+                return;
+                }
+
+                g.isHostsTurn = !g.isHostsTurn;
                 g.turnNr ++;
             } else {
-                emit Error("Please enter a valid field");
+            emit Error("Your choice of field was not valid");
             }
         }
     }
@@ -158,16 +163,4 @@ contract TicTacToe
         board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
         _isHostsTurn = g.isHostsTurn;
     }
-
-//    function toString(uint integer) internal view returns (string convString) {
-//        byte32 byties = bytes32(integer);
-//        bytes memory bytesString = new bytes(32);
-//        for (uint j=0; j<32; j++) {
-//            byte char = byte(bytes32(uint(byties) * 2 ** (8 * j)));
-//            if (char != 0) {
-//                bytesString[j] = char;
-//            }
-//        }
-//        return string(bytesString);
-//    }
 }

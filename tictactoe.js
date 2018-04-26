@@ -144,6 +144,7 @@ var contractAbi = [
 
 var contract;
 var userAddressesArray;
+var playerOnTurn;
 var userAddress;
 var hostAddress;
 var boardArray = [];
@@ -267,6 +268,7 @@ function play(row, col) {
 			console.log("This is the error: ");
 			console.log(error);
 		})
+
 }
 
 function refreshBoard() {
@@ -304,28 +306,44 @@ function refreshBoard() {
 			document.querySelector('.field9').innerHTML = boolArray[8];
 			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			console.log(JSON.stringify(result));
+			if(result._isHostsTurn == true && (userAddress==hostAddress)){
+                document.querySelector('.playerOnTurn').innerHTML = "Its your turn!!!"
+            }
+            else if(result._isHostsTurn == true && (userAddress!=hostAddress)){
+                document.querySelector('.playerOnTurn').innerHTML = "Its your opponents turn!!!"
+            }
+            else if(result._isHostsTurn == false && (userAddress==hostAddress)){
+                document.querySelector('.playerOnTurn').innerHTML = "Its your opponents turn!!!"
+            }
+            else if(result._isHostsTurn == false && (userAddress!=hostAddress)){
+                document.querySelector('.playerOnTurn').innerHTML = "Its your turn!!!"
+            }
+            else{
+                document.querySelector('.playerOnTurn').innerHTML = "Noooooo clueeeeeeee!!!"
+
+            }
 		});
 };
 
 function cellClick(cell) {
-    if (cell.id == "1-1") {
+    if (cell.id == "0-0") {
+        play(0,0);
+    } else if (cell.id == "0-1") {
+        play(0,1);
+    } else if (cell.id == "0-2") {
+        play(0,2);
+    } else if (cell.id == "1-0") {
+        play(1,0);
+    } else if (cell.id == "1-1") {
         play(1,1);
     } else if (cell.id == "1-2") {
         play(1,2);
-    } else if (cell.id == "1-3") {
-        play(1,3);
+    } else if (cell.id == "2-0") {
+        play(2,0);
     } else if (cell.id == "2-1") {
         play(2,1);
     } else if (cell.id == "2-2") {
         play(2,2);
-    } else if (cell.id == "2-3") {
-        play(2,3);
-    } else if (cell.id == "3-1") {
-        play(3,1);
-    } else if (cell.id == "3-2") {
-        play(3,2);
-    } else if (cell.id == "3-3") {
-        play(3,3);
 
     }
 }
