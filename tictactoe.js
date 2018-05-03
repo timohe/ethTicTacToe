@@ -271,6 +271,14 @@ function play(row, col) {
 
 }
 
+function on() {
+    document.getElementById("card-panel").style.display = "block";
+}
+
+function off() {
+    document.getElementById("card-panel").style.display = "none";
+}
+
 function refreshBoard() {
 	console.log("Refreshing board...");
 	contract.methods.printBoard(hostAddress).call()

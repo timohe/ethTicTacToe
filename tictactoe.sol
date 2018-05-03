@@ -5,7 +5,7 @@ contract TicTacToe
     event Log(string log);
     event Error(string error);
     event GameOver(string whoWon);
-    uint constant pot = 0 ether;
+    uint constant pot = 5 ether;
 
     modifier rightAmountPaid {
         if(msg.value != pot){
@@ -126,6 +126,11 @@ contract TicTacToe
         if(g.turnNr > 8){
             return true;
         }
+    }
+
+    function getBalance(address host) public view returns (uint256 _balance){
+    Game storage g = games[host];
+    _balance = g.balance;
     }
 
     function getGameState(address host) public view returns (address _opponent, bool _isHostsTurn, uint _turnNr, uint _board1, uint _board2, uint _board3) {
