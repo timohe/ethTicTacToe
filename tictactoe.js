@@ -177,7 +177,8 @@ function setAddressArrayAndInit() {
 	web3.eth.getAccounts().then(function (result) {
 		userAddressesArray = result;
 		populateAddressDropdown();
-		userAddress = userAddressesArray[0]
+		userAddress = userAddressesArray[0];
+		userAddress = userAddress.toLowerCase();
 	}).catch(function (error) {
 		console.log(error);
 	});
@@ -204,6 +205,7 @@ function getAddressItemsSetter(address) {
 
 function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
+	userAddress = userAddress.toLowerCase();
 	console.log("User address changed to: " + userAddress);
 }
 
@@ -306,6 +308,9 @@ function refreshBoard() {
 			document.querySelector('.field9').innerHTML = boolArray[8];
 			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			console.log(JSON.stringify(result));
+			console.log("This is your user Address: " + userAddress);
+			console.log("..and this is the host address: " + hostAddress);
+			
 			if(result._isHostsTurn == true && (userAddress==hostAddress)){
                 document.querySelector('.playerOnTurn').innerHTML = "Its your turn!!!"
             }
