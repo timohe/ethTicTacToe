@@ -150,6 +150,7 @@ var hostAddress;
 var boardArray = [];
 var boolArray = [];
 setAddressArrayAndInit();
+var gasToSend = 1000000
 var isRefreshPaused = true;
 var answer = setInterval(function() {
     if(!isRefreshPaused) {
@@ -213,7 +214,7 @@ function host() {
     isRefreshPaused=true;
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('4', 'ether');
-	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact })
+	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact, gas: gasToSend })
 		.on('receipt', function (receipt) {
 			console.log("Transaction successfull, receipt:");
 			console.log(receipt);
@@ -234,7 +235,7 @@ function joinExistingGame() {
 
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
-	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact })
+	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact, gas: gasToSend })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 			refreshBoard();
@@ -249,7 +250,7 @@ function joinExistingGame() {
 function play(row, col) {
 	console.log("Making move...from address" + userAddress);
 	isRefreshPaused = true;
-	contract.methods.play(hostAddress, row, col).send({ from: userAddress })
+	contract.methods.play(hostAddress, row, col).send({ from: userAddress, gas: gasToSend })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 			if (receipt.events && receipt.events.GameOver && receipt.events.GameOver.returnValues) {
@@ -321,7 +322,7 @@ function refreshBoard() {
 			console.log(JSON.stringify(result));
 			console.log("This is your user Address: " + userAddress);
 			console.log("..and this is the host address: " + hostAddress);
-			
+
 			if(result._isHostsTurn == true && (userAddress==hostAddress)){
                 document.querySelector('.playerOnTurn').innerHTML = "Its your turn!!!"
             }

@@ -140,16 +140,18 @@ contract TicTacToe
 
     function clearBoard(address host) internal
     {
-        games[host].board[0][0] = 0;
-        games[host].board[0][1] = 0;
-        games[host].board[0][2] = 0;
-        games[host].board[1][0] = 0;
-        games[host].board[1][1] = 0;
-        games[host].board[1][2] = 0;
-        games[host].board[2][0] = 0;
-        games[host].board[2][1] = 0;
-        games[host].board[2][2] = 0;
-        games[host].opponent = 0;
+        Game storage g = games[host];
+        g.board[0][0] = 0;
+        g.board[0][1] = 0;
+        g.board[0][2] = 0;
+        g.board[1][0] = 0;
+        g.board[1][1] = 0;
+        g.board[1][2] = 0;
+        g.board[2][0] = 0;
+        g.board[2][1] = 0;
+        g.board[2][2] = 0;
+        g.opponent = 0;
+        g.isHostsTurn = true;
     }
 
     function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
