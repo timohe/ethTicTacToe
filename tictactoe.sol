@@ -71,10 +71,10 @@ contract TicTacToe
                 {
                     if(player == 1){
                         host.transfer(2*pot);
-                        emit GameOver("host won");
+                        emit GameOver("host");
                     }else{
                         g.opponent.transfer(2*pot);
-                        emit GameOver("opponent won");
+                        emit GameOver("opponent");
                     }
                     return;
                 }
