@@ -41,3 +41,7 @@ click on the connect button with remix
 
 ## Issues
 `Unhandled rejection Error: Couldn't decode bool from ABI: 0x`means you forgot to deploy the contract, prob set remix to Javascript VM
+
+## Important commands
+
+`web3.fromWei(eth.getBalance(eth.accounts[1]), "ether")`
