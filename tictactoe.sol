@@ -5,7 +5,7 @@ contract TicTacToe
     event Log(string log);
     event Error(string error);
     event GameOver(string whoWon);
-    uint constant pot = 0 ether;
+    uint constant pot = 5 ether;
 
     modifier rightAmountPaid {
         if(msg.value != pot){
