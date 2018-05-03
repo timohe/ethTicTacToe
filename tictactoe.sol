@@ -5,7 +5,7 @@ contract TicTacToe
     event Log(string log);
     event Error(string error);
     event GameOver(string whoWon);
-    uint constant pot = 0 ether;
+    uint constant pot = 5 ether;
 
     modifier rightAmountPaid {
         if(msg.value != pot){
@@ -140,18 +140,16 @@ contract TicTacToe
 
     function clearBoard(address host) internal
     {
-        Game storage g = games[host];
-        g.board[0][0] = 0;
-        g.board[0][1] = 0;
-        g.board[0][2] = 0;
-        g.board[1][0] = 0;
-        g.board[1][1] = 0;
-        g.board[1][2] = 0;
-        g.board[2][0] = 0;
-        g.board[2][1] = 0;
-        g.board[2][2] = 0;
-        g.opponent = 0;
-        g.isHostsTurn = true;
+        games[host].board[0][0] = 0;
+        games[host].board[0][1] = 0;
+        games[host].board[0][2] = 0;
+        games[host].board[1][0] = 0;
+        games[host].board[1][1] = 0;
+        games[host].board[1][2] = 0;
+        games[host].board[2][0] = 0;
+        games[host].board[2][1] = 0;
+        games[host].board[2][2] = 0;
+        games[host].opponent = 0;
     }
 
     function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
