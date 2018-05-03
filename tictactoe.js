@@ -177,7 +177,8 @@ function setAddressArrayAndInit() {
 	web3.eth.getAccounts().then(function (result) {
 		userAddressesArray = result;
 		populateAddressDropdown();
-		userAddress = userAddressesArray[0]
+		userAddress = userAddressesArray[0];
+		userAddress = userAddress.toLowerCase();
 	}).catch(function (error) {
 		console.log(error);
 	});
@@ -204,6 +205,7 @@ function getAddressItemsSetter(address) {
 
 function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
+	userAddress = userAddress.toLowerCase();
 	console.log("User address changed to: " + userAddress);
 }
 
@@ -252,15 +254,25 @@ function play(row, col) {
 			console.log(receipt);
 			if (receipt.events && receipt.events.GameOver && receipt.events.GameOver.returnValues) {
 				if (receipt.events.GameOver.returnValues[0] === "host") {
-					alert("Game is over. The host won the game! He got the pot money");
+					if(userAddress === hostAddress){
+						alert("You won the game. The money was sent to your address!");
+					}else{
+						alert("You suck and lost the game :(. ");
+					}
 				}
 				if (receipt.events.GameOver.returnValues[0] === "opponent") {
+					if(userAddress === hostAddress){
+						alert("You suck and lost the game :(. ");
+					}else{
+						alert("You won the game. The money was sent to your address!");
+					}
 					alert("Game is over. The opponent won the game! He got the pot money");
 				}
 				if (receipt.events.GameOver.returnValues[0] === "tie") {
 					alert("Game is over. Nobody won so you both got your money back");
 				}
-				alert("The game is over! The winner is:" + receipt.events.GameOver.returnValues[0] + "The pot was sent to the winner");
+				console.log("The game is over! The winner is: " + receipt.events.GameOver.returnValues[0] + ". "+"The pot was sent to the winner");
+				console.log("Your user address is :"+userAddress+"And the host address is: "+hostAddress);
 			}
 			isRefreshPaused=false;
 			refreshBoard();
@@ -307,6 +319,9 @@ function refreshBoard() {
 			document.querySelector('.field9').innerHTML = boolArray[8];
 			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			console.log(JSON.stringify(result));
+			console.log("This is your user Address: " + userAddress);
+			console.log("..and this is the host address: " + hostAddress);
+			
 			if(result._isHostsTurn == true && (userAddress==hostAddress)){
                 document.querySelector('.playerOnTurn').innerHTML = "Its your turn!!!"
             }
