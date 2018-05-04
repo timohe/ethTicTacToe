@@ -101,7 +101,7 @@ contract TicTacToe
                 g.isHostsTurn = !g.isHostsTurn;
                 g.turnNr ++;
             } else {
-            emit Error("Your choice of field was not valid");
+                emit Error("Your choice of field was not valid");
             }
         }
     }
