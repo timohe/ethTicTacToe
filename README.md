@@ -40,7 +40,7 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 click on the connect button with remix 
 
 ## Issues
--Says its your oponents turn if you change account
+-If you host a second time the message says "its your opponents turn" because isHostsTurn is reset to true.
 
 ## Important commands
 
