@@ -255,6 +255,7 @@ function host() {
 			console.log("Transaction successfull, receipt:");
 			console.log(receipt);
 			game_hosted = true;
+			document.querySelector('.playerOnTurn').innerHTML = "Please wait for an opponent to join and make a move!"
 			//refreshBoard();
 		})
 		.on('error', function (error) {
