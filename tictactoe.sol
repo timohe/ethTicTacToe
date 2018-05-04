@@ -138,7 +138,7 @@ contract TicTacToe
         }
     }
 
-    function clearBoard(address host) public
+    function clearBoard(address host) internal
     {
         Game storage g = games[host];
         delete g.board[0][0];

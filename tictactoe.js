@@ -249,7 +249,7 @@ function changeUserAddress() {
 function host() {
 	isRefreshPaused = true;
 	console.log("Hosting new game...");
-	valueToTransact = web3.utils.toWei('4', 'ether');
+	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact, gas: gasToSend })
 		.on('receipt', function (receipt) {
 			console.log("Transaction successfull, receipt:");
