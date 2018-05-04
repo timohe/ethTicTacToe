@@ -73,6 +73,7 @@ contract TicTacToe
             if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0)
             {
                 g.board[row][column] = player;
+                g.turnNr ++;
 
                 if(youWon(host))
                 {
@@ -86,7 +87,6 @@ contract TicTacToe
                         emit GameOver("opponent");
                     }
                     g.isHostsTurn = !g.isHostsTurn;
-                    g.turnNr = 0;
                     return;
                 }
 
@@ -97,14 +97,12 @@ contract TicTacToe
                     g.opponent.transfer(2 ether);
                     //g.opponent.transfer(pot/2);
                     g.isHostsTurn = !g.isHostsTurn;
-                    g.turnNr = 0;
                     emit GameOver("tie");
                     return;
                 }
 
                 emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
-                g.turnNr ++;
                 return;
 
             } else {
