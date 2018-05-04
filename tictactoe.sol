@@ -25,10 +25,6 @@ contract TicTacToe
 
     mapping (address => Game) games;
 
-    function triggerEvent() public{
-        
-    }
-
     function paycontract() public payable {
     }
     
@@ -82,11 +78,11 @@ contract TicTacToe
                 {
                     if(player == 1){
                         //host.transfer(2*pot);
-                        host.transfer(2*pot);
+                        host.transfer(4 ether);
                         emit GameOver("host");
                     }else{
                         //g.opponent.transfer(2*pot);
-                        g.opponent.transfer(2*pot);
+                        g.opponent.transfer(4 ether);
                         emit GameOver("opponent");
                     }
                     g.isHostsTurn = !g.isHostsTurn;
@@ -97,8 +93,8 @@ contract TicTacToe
                 if(isTie(host))
                 {
                     //host.transfer(pot/2);
-                    host.transfer(pot/2);
-                    g.opponent.transfer(pot/2);
+                    host.transfer(2 ether);
+                    g.opponent.transfer(2 ether);
                     //g.opponent.transfer(pot/2);
                     g.isHostsTurn = !g.isHostsTurn;
                     g.turnNr = 0;
