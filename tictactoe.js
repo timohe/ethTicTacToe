@@ -2,7 +2,6 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 var contractAddr; //TODO: hardcode this address for presentation
 var contractAbi = [
-	
 		{
 			"constant": false,
 			"inputs": [],
@@ -212,10 +211,7 @@ var answer = setInterval(function() {
 		if(game_hosted && opp_has_joined)
         refreshBoard();
     }
-    }, 10000);
-
-
-
+    }, 1000);
 
 window.onload = function () {
 	//listen for changes in contract field
@@ -429,13 +425,6 @@ function cellClick(cell) {
 		play(2, 2);
 
 	}
-}
-
-function printGameState() {
-	contract.methods.getGameState(hostAddress).call()
-		.then(function (result) {
-			console.log(result);
-		})
 }
 
 function clearBoard() {

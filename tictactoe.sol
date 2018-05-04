@@ -78,12 +78,12 @@ contract TicTacToe
                 {
                     if(player == 1){
                         //host.transfer(2*pot);
-                        host.call.value(2*pot).gas(999999)();
+                        host.transfer(2*pot);
                         emit GameOver("host");
                     }else{
                         //g.opponent.transfer(2*pot);
-                        g.opponent.call.value(2*pot).gas(999999)();
-                    emit GameOver("opponent");
+                        g.opponent.transfer(2*pot);
+                        emit GameOver("opponent");
                     }
                     g.isHostsTurn = !g.isHostsTurn;
                     g.turnNr = 0;
@@ -93,8 +93,8 @@ contract TicTacToe
                 if(isTie(host))
                 {
                     //host.transfer(pot/2);
-                    host.call.value(pot/2).gas(999999)();
-                    g.opponent.call.value(pot/2).gas(999999)();
+                    host.transfer(pot/2);
+                    g.opponent.transfer(pot/2);
                     //g.opponent.transfer(pot/2);
                     g.isHostsTurn = !g.isHostsTurn;
                     g.turnNr = 0;
@@ -136,35 +136,16 @@ contract TicTacToe
 
     function isTie(address host) internal view returns (bool isItATie)
     {
+        //does not work yet, because check at play doesnt make sense!
         Game storage g = games[host];
         if(g.turnNr > 8){
             return true;
         }
     }
- 
-
-    function getGameState(address host) public view returns (address _opponent, bool _isHostsTurn, uint _turnNr, uint _board1, uint _board2, uint _board3) {
-        Game storage g = games[host];
-        _opponent = g.opponent;
-        _isHostsTurn = g.isHostsTurn;
-        _turnNr = g.turnNr;
-        _board1 = (999000 + 100 * (g.board[0][0])) + (10 * (g.board[0][1])) + (g.board[0][2]);
-        _board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
-        _board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
-    }
 
     function clearBoard(address host) public
     {
         Game storage g = games[host];
-//        g.board[0][0] = 0;
-//        g.board[0][1] = 0;
-//        g.board[0][2] = 0;
-//        g.board[1][0] = 0;
-//        g.board[1][1] = 0;
-//        g.board[1][2] = 0;
-//        g.board[2][0] = 0;
-//        g.board[2][1] = 0;
-//        g.board[2][2] = 0;
         delete g.board[0][0];
         delete g.board[0][1];
         delete g.board[0][2];
@@ -174,8 +155,8 @@ contract TicTacToe
         delete g.board[2][0];
         delete  g.board[2][1];
         delete g.board[2][2];
-        g.opponent = 0;
-        g.isHostsTurn = true;
+        delete g.opponent;
+        delete g.isHostsTurn;
     }
 
     function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
