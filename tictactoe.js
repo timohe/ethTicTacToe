@@ -205,7 +205,7 @@ window.onload = function () {
 function getContractAddressSetter() {
 	return function () {
 		contractAddr = document.getElementById("contractAddress").value;
-		console.log("Address set as: " + contractAddr);
+		// console.log("Address set as: " + contractAddr);
 		contract = new web3.eth.Contract(contractAbi, contractAddr);
 	}
 }
@@ -269,8 +269,7 @@ function host() {
 function joinExistingGame() {
 	isRefreshPaused = true;
 	hostAddress = document.getElementById("hostAddress").value;
-	console.log("This is the host address to join: " + JSON.stringify(hostAddress));
-
+	// console.log("This is the host address to join: " + JSON.stringify(hostAddress));
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact, gas: gasToSend })
@@ -287,7 +286,7 @@ function joinExistingGame() {
 };
 
 function play(row, col) {
-	console.log("Making move...from address" + userAddress);
+	console.log("Making move...");
 	isRefreshPaused = true;
 	contract.methods.play(hostAddress, row, col).send({ from: userAddress, gas: gasToSend })
 		.on('receipt', function (receipt) {
