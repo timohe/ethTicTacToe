@@ -25,6 +25,13 @@ contract TicTacToe
 
     mapping (address => Game) games;
 
+    function paycontract() public payable {
+    }
+    
+    function getBalance() public constant returns(uint bal) {
+        bal = address(this).balance;
+    }
+
     function hostNewGame() payable rightAmountPaid public
     {
         Game storage g = games[msg.sender];
@@ -138,7 +145,7 @@ contract TicTacToe
         _board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
     }
 
-    function clearBoard(address host) internal
+    function clearBoard(address host) public
     {
         Game storage g = games[host];
         g.board[0][0] = 0;
