@@ -34,11 +34,8 @@ contract TicTacToe
 
     function hostNewGame() payable rightAmountPaid public
     {
-        Game storage g = games[msg.sender];
-        g.isHostsTurn = true;
-        g.turnNr = 0;
-        g.opponent = 0;
         clearBoard(msg.sender);
+        Game storage g = games[msg.sender];
         emit Log("successfully hosted Game!");
     }
 
@@ -155,6 +152,7 @@ contract TicTacToe
         delete g.board[2][2];
         delete g.opponent;
         delete g.isHostsTurn;
+        delete g.turnNr;
     }
 
     function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
