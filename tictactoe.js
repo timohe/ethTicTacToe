@@ -2,6 +2,7 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
 var contractAddr; //TODO: hardcode this address for presentation
 var contractAbi = [
+	
 		{
 			"constant": false,
 			"inputs": [],
@@ -40,6 +41,25 @@ var contractAbi = [
 			"type": "function"
 		},
 		{
+			"constant": true,
+			"inputs": [
+				{
+					"name": "host",
+					"type": "address"
+				}
+			],
+			"name": "youWon",
+			"outputs": [
+				{
+					"name": "didYouWin",
+					"type": "bool"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
 			"constant": false,
 			"inputs": [],
 			"name": "hostNewGame",
@@ -60,45 +80,6 @@ var contractAbi = [
 			"outputs": [],
 			"payable": true,
 			"stateMutability": "payable",
-			"type": "function"
-		},
-		{
-			"constant": true,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
-				}
-			],
-			"name": "getGameState",
-			"outputs": [
-				{
-					"name": "_opponent",
-					"type": "address"
-				},
-				{
-					"name": "_isHostsTurn",
-					"type": "bool"
-				},
-				{
-					"name": "_turnNr",
-					"type": "uint256"
-				},
-				{
-					"name": "_board1",
-					"type": "uint256"
-				},
-				{
-					"name": "_board2",
-					"type": "uint256"
-				},
-				{
-					"name": "_board3",
-					"type": "uint256"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -190,6 +171,7 @@ var contractAbi = [
 			"name": "GameOver",
 			"type": "event"
 		}
+	
 	
 ];
 
