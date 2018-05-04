@@ -5,7 +5,7 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta http-equiv="X-UA-Compatible" content="ie=edge">
-	<title>ethTTT</title>
+	<title>DickCrackHoes</title>
 
 	<!-- Compiled and minified CSS -->
 	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
@@ -28,7 +28,6 @@
 			<label>Select your Account</label>
 
 			<select class="browser-default" onchange="changeUserAddress()" id='addressDropdown'></select>
-			</select>
 		</div>
 	</div>
 
@@ -45,61 +44,48 @@
 		<button class="waves-effect waves-light btn" onclick="host();" id="button">Host new game</button>
 
 		<!-- <button class="waves-effect waves-light btn" onclick="testEvent();" id="button">TEST EVENT</button> -->
-		<button class="waves-effect waves-light btn" onclick="printBoard();" id="button">TEST Printboard</button>
 		<button class="waves-effect waves-light btn" onclick="clearBoard();" id="button">TEST clearBoard</button>
-		<button class="waves-effect waves-light btn" onclick="refreshBoard();" id="button">TEST refreshBoard</button>
-		
-	</div>
 
+	</div>
 	<div class="card-panel">
-		<h4>Play!</h4>
+		<h4 class="playerOnTurn">Play!!</h4>
 		<table>
 			<tr>
-				<td>
+				<td id="0-0" onclick="cellClick(this);">
 					<div class="content"><span class='field1'></span></div>
 				</td>
-				<td>
+				<td id="0-1" onclick="cellClick(this);">
 					<div class="content"><span class='field2'></span></div>
 				</td>
-				<td>
+				<td id="0-2" onclick="cellClick(this);">
 					<div class="content"><span class='field3'></span></div>
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td id="1-0" onclick="cellClick(this);">
 					<div class="content"><span class='field4'></span></div>
 				</td>
-				<td>
+				<td id="1-1" onclick="cellClick(this);">
 					<div class="content"><span class='field5'></span></div>
 				</td>
-				<td>
+				<td id="1-2" onclick="cellClick(this);">
 					<div class="content"><span class='field6'></span></div>
 				</td>
 			</tr>
 			<tr>
-				<td>
+				<td id="2-0" onclick="cellClick(this);">
 					<div class="content"><span class='field7'></span></div>
 				</td>
-				<td>
+				<td id="2-1" onclick="cellClick(this);">
 					<div class="content"><span class='field8'></span></div>
 				</td>
-				<td>
+				<td id="2-2" onclick="cellClick(this);">
 					<div class="content"><span class='field9'></span></div>
 				</td>
 			</tr>
 		</table>
-		<div>
-			<p>Is it the hosts turn?</p> <span class='isHostsTurn'></span>
-		</div>
-		<div>
-			<h5>Make a move</h5>
-			Row:
-			<input id="moveRow" type="number"> Column:
-			<input id="moveColumn" type="number">
-			<button class="waves-effect waves-light btn" onclick="makeMove();" id="button">Make move</button>
-		</div>
-
 	</div>
+
 </body>
 
 </html>
