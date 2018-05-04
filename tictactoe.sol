@@ -34,11 +34,8 @@ contract TicTacToe
 
     function hostNewGame() payable rightAmountPaid public
     {
-        Game storage g = games[msg.sender];
-        g.isHostsTurn = true;
-        g.turnNr = 0;
-        g.opponent = 0;
         clearBoard(msg.sender);
+        Game storage g = games[msg.sender];
         emit Log("successfully hosted Game!");
     }
 
@@ -73,38 +70,36 @@ contract TicTacToe
             if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0)
             {
                 g.board[row][column] = player;
+                g.turnNr ++;
 
                 if(youWon(host))
                 {
                     if(player == 1){
                         //host.transfer(2*pot);
-                        host.transfer(2*pot);
+                        host.transfer(4 ether);
                         emit GameOver("host");
                     }else{
                         //g.opponent.transfer(2*pot);
-                        g.opponent.transfer(2*pot);
+                        g.opponent.transfer(4 ether);
                         emit GameOver("opponent");
                     }
                     g.isHostsTurn = !g.isHostsTurn;
-                    g.turnNr = 0;
                     return;
                 }
 
                 if(isTie(host))
                 {
                     //host.transfer(pot/2);
-                    host.transfer(pot/2);
-                    g.opponent.transfer(pot/2);
+                    host.transfer(2 ether);
+                    g.opponent.transfer(2 ether);
                     //g.opponent.transfer(pot/2);
                     g.isHostsTurn = !g.isHostsTurn;
-                    g.turnNr = 0;
                     emit GameOver("tie");
                     return;
                 }
 
                 emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
-                g.turnNr ++;
                 return;
 
             } else {
@@ -143,7 +138,7 @@ contract TicTacToe
         }
     }
 
-    function clearBoard(address host) public
+    function clearBoard(address host) internal
     {
         Game storage g = games[host];
         delete g.board[0][0];
@@ -157,6 +152,7 @@ contract TicTacToe
         delete g.board[2][2];
         delete g.opponent;
         delete g.isHostsTurn;
+        delete g.turnNr;
     }
 
     function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
