@@ -25,6 +25,13 @@ contract TicTacToe
 
     mapping (address => Game) games;
 
+    function paycontract() public payable {
+    }
+    
+    function getBalance() public view returns(uint bal) {
+        bal = address(this).balance;
+    }
+
     function hostNewGame() payable rightAmountPaid public
     {
         Game storage g = games[msg.sender];
@@ -101,7 +108,7 @@ contract TicTacToe
                 return;
 
             } else {
-            emit Error("Your choice of field was not valid");
+                emit Error("Your choice of field was not valid");
             }
         }
     }
