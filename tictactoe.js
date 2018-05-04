@@ -362,7 +362,7 @@ function refreshBoard() {
 			document.querySelector('.field7').innerHTML = boolArray[6];
 			document.querySelector('.field8').innerHTML = boolArray[7];
 			document.querySelector('.field9').innerHTML = boolArray[8];
-			document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
+			// document.querySelector('.isHostsTurn').innerHTML = result._isHostsTurn;
 			// console.log(JSON.stringify(result));
 			// console.log("This is your user Address: " + userAddress);
 			// console.log("..and this is the host address: " + hostAddress);
