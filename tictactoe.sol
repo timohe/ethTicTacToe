@@ -141,10 +141,7 @@ contract TicTacToe
             return true;
         }
     }
-
-    function getBalance() public view returns (uint256 _balance){
-    _balance = address(this).balance;
-    }
+ 
 
     function getGameState(address host) public view returns (address _opponent, bool _isHostsTurn, uint _turnNr, uint _board1, uint _board2, uint _board3) {
         Game storage g = games[host];
