@@ -255,7 +255,7 @@ function host() {
 			console.log("Transaction successfull, receipt:");
 			console.log(receipt);
 			game_hosted = true;
-			document.querySelector('.playerOnTurn').innerHTML = "Please wait for an opponent to join and make a move!"
+			document.querySelector('.playerOnTurn').innerHTML = "Please wait for an opponent to join and make a move!";
 			//refreshBoard();
 		})
 		.on('error', function (error) {
@@ -295,19 +295,25 @@ function play(row, col) {
 				if (receipt.events.GameOver.returnValues[0] === "host") {
 					if (userAddress === hostAddress) {
 						alert("You won the game. The money was sent to your address!");
+						document.querySelector('.playerOnTurn').innerHTML = "Game is over. You won!";
+						
 					} else {
 						alert("You suck and lost the game :(. ");
+						document.querySelector('.playerOnTurn').innerHTML = "Game is over. You lost!";
 					}
 				}
 				if (receipt.events.GameOver.returnValues[0] === "opponent") {
 					if (userAddress === hostAddress) {
 						alert("You suck and lost the game :(. ");
+						document.querySelector('.playerOnTurn').innerHTML = "Game is over. You lost!";
 					} else {
 						alert("You won the game. The money was sent to your address!");
+						document.querySelector('.playerOnTurn').innerHTML = "Game is over. You won!";
 					}
 				}
 				if (receipt.events.GameOver.returnValues[0] === "tie") {
 					alert("Game is over. Nobody won so you both got your money back");
+					document.querySelector('.playerOnTurn').innerHTML = "Game is over. It was a Tie!";
 				}
 				// console.log("The game is over! The winner is: " + receipt.events.GameOver.returnValues[0] + ". "+"The pot was sent to the winner");
 				// console.log("Your user address is :"+userAddress+"And the host address is: "+hostAddress);
