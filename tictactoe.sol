@@ -28,7 +28,7 @@ contract TicTacToe
     function paycontract() public payable {
     }
     
-    function getBalance() public constant returns(uint bal) {
+    function getBalance() public view returns(uint bal) {
         bal = address(this).balance;
     }
 
