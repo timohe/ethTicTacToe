@@ -25,6 +25,10 @@ contract TicTacToe
 
     mapping (address => Game) games;
 
+    function triggerEvent() public{
+        
+    }
+
     function paycontract() public payable {
     }
     
