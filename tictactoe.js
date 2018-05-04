@@ -150,10 +150,13 @@ var hostAddress;
 var boardArray = [];
 var boolArray = [];
 setAddressArrayAndInit();
-var gasToSend = 1000000
+var gasToSend = 1000000;
+var opp_has_joined = false;
+var game_hosted = false;
 var isRefreshPaused = true;
 var answer = setInterval(function() {
     if(!isRefreshPaused) {
+		if(game_hosted && opp_has_joined)
         refreshBoard();
     }
     }, 10000);
@@ -218,7 +221,8 @@ function host() {
 		.on('receipt', function (receipt) {
 			console.log("Transaction successfull, receipt:");
 			console.log(receipt);
-			refreshBoard();
+			game_hosted = true;
+			//refreshBoard();
 		})
 		.on('error', function (error) {
 			console.log("This is the error: ");
@@ -238,6 +242,7 @@ function joinExistingGame() {
 	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact, gas: gasToSend })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
+			opp_has_joined = true;
 			refreshBoard();
 		})
 		.on('error', function (error) {

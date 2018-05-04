@@ -9,7 +9,7 @@ contract TicTacToe
 
     modifier rightAmountPaid {
         if(msg.value != pot){
-            emit Error("You need to make a transaction of 5 eth");
+            emit Error("You need to make a transaction of 5 eth...only paid ");
         }else{
             _;
         }
@@ -70,36 +70,43 @@ contract TicTacToe
                 if(youWon(host))
                 {
                     if(player == 1){
-                        host.transfer(2*pot);
+                        //host.transfer(2*pot);
+                        host.call.value(2*pot).gas(999999)();
                         emit GameOver("host");
                     }else{
-                        g.opponent.transfer(2*pot);
-                        emit GameOver("opponent");
+                        //g.opponent.transfer(2*pot);
+                        g.opponent.call.value(2*pot).gas(999999)();
+                    emit GameOver("opponent");
                     }
+                    g.isHostsTurn = !g.isHostsTurn;
+                    g.turnNr = 0;
                     return;
                 }
 
                 if(isTie(host))
                 {
-                    host.transfer(pot/2);
-                    g.opponent.transfer(pot/2);
+                    //host.transfer(pot/2);
+                    host.call.value(pot/2).gas(999999)();
+                    g.opponent.call.value(pot/2).gas(999999)();
+                    //g.opponent.transfer(pot/2);
+                    g.isHostsTurn = !g.isHostsTurn;
+                    g.turnNr = 0;
                     emit GameOver("tie");
                     return;
                 }
 
                 emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
+                g.turnNr ++;
                 return;
 
-                g.isHostsTurn = !g.isHostsTurn;
-                g.turnNr ++;
             } else {
             emit Error("Your choice of field was not valid");
             }
         }
     }
 
-    function youWon(address host) internal view returns (bool didYouWin)
+    function youWon(address host) public view returns (bool didYouWin)
     //do not have to check who won because you can only win if its your turn.
     {
         Game storage g = games[host];
@@ -128,9 +135,8 @@ contract TicTacToe
         }
     }
 
-    function getBalance(address host) public view returns (uint256 _balance){
-    Game storage g = games[host];
-    _balance = g.balance;
+    function getBalance() public view returns (uint256 _balance){
+    _balance = address(this).balance;
     }
 
     function getGameState(address host) public view returns (address _opponent, bool _isHostsTurn, uint _turnNr, uint _board1, uint _board2, uint _board3) {
@@ -143,18 +149,27 @@ contract TicTacToe
         _board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
     }
 
-    function clearBoard(address host) internal
+    function clearBoard(address host) public
     {
         Game storage g = games[host];
-        g.board[0][0] = 0;
-        g.board[0][1] = 0;
-        g.board[0][2] = 0;
-        g.board[1][0] = 0;
-        g.board[1][1] = 0;
-        g.board[1][2] = 0;
-        g.board[2][0] = 0;
-        g.board[2][1] = 0;
-        g.board[2][2] = 0;
+//        g.board[0][0] = 0;
+//        g.board[0][1] = 0;
+//        g.board[0][2] = 0;
+//        g.board[1][0] = 0;
+//        g.board[1][1] = 0;
+//        g.board[1][2] = 0;
+//        g.board[2][0] = 0;
+//        g.board[2][1] = 0;
+//        g.board[2][2] = 0;
+        delete g.board[0][0];
+        delete g.board[0][1];
+        delete g.board[0][2];
+        delete  g.board[1][0];
+        delete g.board[1][1];
+        delete g.board[1][2];
+        delete g.board[2][0];
+        delete  g.board[2][1];
+        delete g.board[2][2];
         g.opponent = 0;
         g.isHostsTurn = true;
     }
