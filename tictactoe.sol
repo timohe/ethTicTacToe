@@ -76,11 +76,11 @@ contract TicTacToe
                 {
                     if(player == 1){
                         //host.transfer(2*pot);
-                        host.transfer(4 ether);
+                        host.transfer(10 ether);
                         emit GameOver("host");
                     }else{
                         //g.opponent.transfer(2*pot);
-                        g.opponent.transfer(4 ether);
+                        g.opponent.transfer(10 ether);
                         emit GameOver("opponent");
                     }
                     g.isHostsTurn = !g.isHostsTurn;
@@ -90,8 +90,8 @@ contract TicTacToe
                 if(isTie(host))
                 {
                     //host.transfer(pot/2);
-                    host.transfer(2 ether);
-                    g.opponent.transfer(2 ether);
+                    host.transfer(5 ether);
+                    g.opponent.transfer(5 ether);
                     //g.opponent.transfer(pot/2);
                     g.isHostsTurn = !g.isHostsTurn;
                     emit GameOver("tie");

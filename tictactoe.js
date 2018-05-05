@@ -200,6 +200,7 @@ window.onload = function () {
 	var elem = document.getElementById("contractAddress");
 	elem.addEventListener("blur", getContractAddressSetter(), true);
 	getContractAddressSetter()();
+	hideBoard();
 };
 
 function getContractAddressSetter() {
@@ -256,6 +257,7 @@ function host() {
 			console.log(receipt);
 			game_hosted = true;
 			document.querySelector('.playerOnTurn').innerHTML = "Please wait for an opponent to join and make a move!";
+			displayBoard();
 			//refreshBoard();
 		})
 		.on('error', function (error) {
@@ -277,6 +279,7 @@ function joinExistingGame() {
 			console.log(receipt);
 			opp_has_joined = true;
 			refreshBoard();
+			displayBoard();
 		})
 		.on('error', function (error) {
 			console.log("This is the error: ");
@@ -327,12 +330,12 @@ function play(row, col) {
 		})
 }
 
-function on() {
-    document.getElementById("card-panel").style.display = "block";
+function displayBoard() {
+    document.getElementById("gameBoard").style.display = "block";
 }
 
-function off() {
-    document.getElementById("card-panel").style.display = "none";
+function hideBoard() {
+    document.getElementById("gameBoard").style.display = "none";
 }
 
 function refreshBoard() {
