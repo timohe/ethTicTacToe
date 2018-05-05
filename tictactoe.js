@@ -193,7 +193,7 @@ var answer = setInterval(function() {
 		if(game_hosted && opp_has_joined)
         refreshBoard();
     }
-    }, 1000);
+    }, 1);
 
 window.onload = function () {
 	//listen for changes in contract field
