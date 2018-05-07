@@ -40,7 +40,14 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 click on the connect button with remix 
 
 ## Issues
--If you host a second time the message says "its your opponents turn" because isHostsTurn is reset to true.
+
+## Things that could be improved
+1. Once you hosted, you cannot get your money back. (this is the business model).
+2. use save math to increase security
+3. Make it possible that one address can host multiple games
+4. Variable pot amount
+
+
 
 ## Important commands
 
