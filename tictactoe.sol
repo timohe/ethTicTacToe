@@ -23,7 +23,7 @@ contract TicTacToe
 
     constructor () public {
         owner = msg.sender;
-    }    
+    }
 
     struct Game
     {
@@ -35,7 +35,7 @@ contract TicTacToe
     }
 
     mapping (address => Game) games;
-    
+
     function getBalance() public view returns(uint bal) {
         bal = address(this).balance;
     }
@@ -94,7 +94,6 @@ contract TicTacToe
                 if(isTie(host)){
                     host.transfer(5 ether);
                     g.opponent.transfer(5 ether);
-                    //g.opponent.transfer(pot/2);
                     g.isHostsTurn = !g.isHostsTurn;
                     emit GameOver("tie");
                     g.gameNotOver = false;
@@ -109,6 +108,7 @@ contract TicTacToe
             }
         }
     }
+
 
     function youWon(address host) public view returns (bool didYouWin){
     //check who won not needed because you can only win if its your turn.
