@@ -31,7 +31,7 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 
 3. after connection click create
 
-4. contract should appear in your geth console    
+4. contract should appear in your geth console
 
 ## Connect Remix with local folder
 1. install remixd     
@@ -39,7 +39,11 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 `$ remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.`   
 click on the connect button with remix 
 
-## Issues
+## To do
+-Say who is the winner in the text above the board
+-Balance in separate window and gets refreshed
+-Tictactoe as square
+-Contract owner can get money left in the contract
 
 ## Things that could be improved
 1. Once you hosted, you cannot get your money back. (this is the business model).
@@ -47,8 +51,5 @@ click on the connect button with remix
 3. Make it possible that one address can host multiple games
 4. Variable pot amount
 
-
-
 ## Important commands
-
 `web3.fromWei(eth.getBalance(eth.accounts[1]), "ether")`
