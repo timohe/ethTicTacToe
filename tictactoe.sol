@@ -30,15 +30,13 @@ contract TicTacToe
         bal = address(this).balance;
     }
 
-    function hostNewGame() payable rightAmountPaid public
-    {
+    function hostNewGame() payable rightAmountPaid public {
         clearBoard(msg.sender);
         Game storage g = games[msg.sender];
         emit Log("successfully hosted Game!");
     }
 
-    function joinExistingGame(address host) payable rightAmountPaid public
-    {
+    function joinExistingGame(address host) payable rightAmountPaid public {
         Game storage g = games[host];
         if(g.opponent == 0 && msg.sender != host)
         {
@@ -102,9 +100,8 @@ contract TicTacToe
         }
     }
 
-    function youWon(address host) public view returns (bool didYouWin)
+    function youWon(address host) public view returns (bool didYouWin){
     //check who won not needed because you can only win if its your turn.
-    {
         Game storage g = games[host];
         for (uint i; i < 3; i++){
             if(g.board[i][0] != 0 && g.board[i][0] == g.board[i][1] && g.board[i][1] == g.board[i][2] ){
@@ -130,17 +127,16 @@ contract TicTacToe
         }
     }
 
-    function clearBoard(address host) internal
-    {
+    function clearBoard(address host) internal{
         Game storage g = games[host];
         delete g.board[0][0];
         delete g.board[0][1];
         delete g.board[0][2];
-        delete  g.board[1][0];
+        delete g.board[1][0];
         delete g.board[1][1];
         delete g.board[1][2];
         delete g.board[2][0];
-        delete  g.board[2][1];
+        delete g.board[2][1];
         delete g.board[2][2];
         delete g.opponent;
         delete g.isHostsTurn;
@@ -148,8 +144,7 @@ contract TicTacToe
         delete g.gameNotOver;
     }
 
-    function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
-    {
+    function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3){
         Game storage g = games[host];
         board1 = (999000 + 100 * (g.board[0][0])) + (10 * (g.board[0][1])) + (g.board[0][2]);
         board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
