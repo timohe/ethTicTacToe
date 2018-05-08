@@ -35,9 +35,9 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 click on the connect button with remix 
 
 ## To do
--Say who is the winner in the text above the board
--Balance in separate window and gets refreshed
--Tictactoe as square
++ Say who is the winner in the text above the board
++ Balance in separate window and gets refreshed
++ Tictactoe as square
 
 Done:   
 -Contract owner can get money left in the contract
