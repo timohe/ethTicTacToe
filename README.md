@@ -1,11 +1,6 @@
 # ethTicTacToe
 Simple TicTacToe game with betting on the Ethereum Blockchain
 
-# Todo
--In smart contract: only accept play() if the field is empty, else throw event handle that on frontend.    
--test if join works    
--test if payouts work    
-
 ## Get environment ready
 1. open geth        
 `$ geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpccorsdomain="*" --rpcapi eth,web3,personal,net,miner,admin`
@@ -40,17 +35,19 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 click on the connect button with remix 
 
 ## To do
--Say who is the winner in the text above the board
--Balance in separate window and gets refreshed
--Tictactoe as square
++ Say who is the winner in the text above the board
++ Balance in separate window and gets refreshed
++ Tictactoe as square
+
+Done:   
 -Contract owner can get money left in the contract
 -Game over so you cant continue playing
 
 ## Things that could be improved
-1. Once you hosted, you cannot get your money back. (this is the business model).
-2. use save math to increase security
-3. Make it possible that one address can host multiple games
-4. Variable pot amount
++ Once you hosted, you cannot get your money back. (this is the business model).    
++ use save math to increase security    
++ Make it possible that one address can host multiple games    
++ Variable pot amount    
 
 ## Important commands
 `web3.fromWei(eth.getBalance(eth.accounts[1]), "ether")`
