@@ -6,6 +6,7 @@ contract TicTacToe
     event Error(string error);
     event GameOver(string whoWon);
     uint constant pot = 5 ether;
+    address public owner;
 
     modifier rightAmountPaid {
         if(msg.value != pot){
@@ -14,6 +15,15 @@ contract TicTacToe
             _;
         }
     }
+
+    modifier onlyOwner() {
+        require (msg.sender == owner);
+        _;
+    }
+
+    constructor () public {
+        owner = msg.sender;
+    }    
 
     struct Game
     {
@@ -150,5 +160,10 @@ contract TicTacToe
         board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
         board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
         _isHostsTurn = g.isHostsTurn;
+    }
+
+    function withdraw() public onlyOwner {
+        require(address(this).balance > 0);
+        owner.transfer(address(this).balance);
     }
 }
