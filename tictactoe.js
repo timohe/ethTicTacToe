@@ -1,6 +1,6 @@
 web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 
-var contractAddr; //TODO: hardcode this address for presentation
+var contractAddr; //can be hardcoded after deploy
 var contractAbi = [
 
     {
@@ -258,7 +258,6 @@ function host() {
             displayBoard();
         })
         .on('error', function (error) {
-            console.log("This is the error: ");
             console.log(error)
         });
     hostAddress = userAddress;
@@ -268,7 +267,6 @@ function host() {
 function joinExistingGame() {
     isRefreshPaused = true;
     hostAddress = document.getElementById("hostAddress").value;
-    // console.log("This is the host address to join: " + JSON.stringify(hostAddress));
     console.log("Joining existing game...");
     valueToTransact = web3.utils.toWei('5', 'ether');
     contract.methods.joinExistingGame(hostAddress).send({from: userAddress, value: valueToTransact, gas: gasToSend})
@@ -279,7 +277,6 @@ function joinExistingGame() {
             displayBoard();
         })
         .on('error', function (error) {
-            console.log("This is the error: ");
             console.log(error);
         })
     isRefreshPaused = false;
@@ -320,7 +317,6 @@ function play(row, col) {
             refreshBoard();
         })
         .on('error', function (error) {
-            console.log("This is the error: ");
             console.log(error);
         })
 }
@@ -414,7 +410,6 @@ function clearBoard() {
             console.log(receipt);
         })
         .on('error', function (error) {
-            console.log("This is the error: ");
             console.log(error);
         })
 }
