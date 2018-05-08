@@ -24,9 +24,6 @@ contract TicTacToe
     }
 
     mapping (address => Game) games;
-
-    function paycontract() public payable {
-    }
     
     function getBalance() public view returns(uint bal) {
         bal = address(this).balance;
