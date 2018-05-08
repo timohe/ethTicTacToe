@@ -19,14 +19,12 @@ contract TicTacToe
     {
         address opponent;
         bool isHostsTurn;
+        bool gameOver;
         uint turnNr;
         mapping(uint => mapping(uint => uint)) board;
     }
 
     mapping (address => Game) games;
-
-    function paycontract() public payable {
-    }
     
     function getBalance() public view returns(uint bal) {
         bal = address(this).balance;
@@ -36,6 +34,7 @@ contract TicTacToe
     {
         clearBoard(msg.sender);
         Game storage g = games[msg.sender];
+        g.gameOver = false;
         emit Log("successfully hosted Game!");
     }
 
@@ -63,7 +62,7 @@ contract TicTacToe
             emit Error("You are not part of this game");
             return;
         }
-        if((g.isHostsTurn && player != 1) || (!g.isHostsTurn && player == 1)){
+        if((g.isHostsTurn && player != 1 && !g.gameOver) || (!g.isHostsTurn && player == 1 && !g.gameOver)){
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
@@ -71,33 +70,29 @@ contract TicTacToe
             {
                 g.board[row][column] = player;
                 g.turnNr ++;
-
-                if(youWon(host))
-                {
+                if(youWon(host)){
                     if(player == 1){
-                        //host.transfer(2*pot);
                         host.transfer(10 ether);
                         emit GameOver("host");
+                        g.gameOver = true;
                     }else{
-                        //g.opponent.transfer(2*pot);
                         g.opponent.transfer(10 ether);
                         emit GameOver("opponent");
+                        g.gameOver = true;
                     }
                     g.isHostsTurn = !g.isHostsTurn;
                     return;
                 }
 
-                if(isTie(host))
-                {
-                    //host.transfer(pot/2);
+                if(isTie(host)){
                     host.transfer(5 ether);
                     g.opponent.transfer(5 ether);
                     //g.opponent.transfer(pot/2);
                     g.isHostsTurn = !g.isHostsTurn;
                     emit GameOver("tie");
+                    g.gameOver = true;
                     return;
                 }
-
                 emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
                 return;
@@ -109,7 +104,7 @@ contract TicTacToe
     }
 
     function youWon(address host) public view returns (bool didYouWin)
-    //do not have to check who won because you can only win if its your turn.
+    //check who won not needed because you can only win if its your turn.
     {
         Game storage g = games[host];
         for (uint i; i < 3; i++){
@@ -129,9 +124,7 @@ contract TicTacToe
         return false;
     }
 
-    function isTie(address host) internal view returns (bool isItATie)
-    {
-        //does not work yet, because check at play doesnt make sense!
+    function isTie(address host) internal view returns (bool isItATie){
         Game storage g = games[host];
         if(g.turnNr > 8){
             return true;

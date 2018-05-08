@@ -44,6 +44,7 @@ click on the connect button with remix
 -Balance in separate window and gets refreshed
 -Tictactoe as square
 -Contract owner can get money left in the contract
+-Game over so you cant continue playing
 
 ## Things that could be improved
 1. Once you hosted, you cannot get your money back. (this is the business model).
