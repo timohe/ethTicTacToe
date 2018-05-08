@@ -19,7 +19,7 @@ contract TicTacToe
     {
         address opponent;
         bool isHostsTurn;
-        bool gameOver;
+        bool gameNotOver;
         uint turnNr;
         mapping(uint => mapping(uint => uint)) board;
     }
@@ -34,7 +34,6 @@ contract TicTacToe
     {
         clearBoard(msg.sender);
         Game storage g = games[msg.sender];
-        g.gameOver = false;
         emit Log("successfully hosted Game!");
     }
 
@@ -62,7 +61,7 @@ contract TicTacToe
             emit Error("You are not part of this game");
             return;
         }
-        if((g.isHostsTurn && player != 1 && !g.gameOver) || (!g.isHostsTurn && player == 1 && !g.gameOver)){
+        if((g.isHostsTurn && player != 1 && g.gameNotOver) || (!g.isHostsTurn && player == 1 && g.gameNotOver)){
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
@@ -146,6 +145,7 @@ contract TicTacToe
         delete g.opponent;
         delete g.isHostsTurn;
         delete g.turnNr;
+        delete g.gameNotOver;
     }
 
     function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
