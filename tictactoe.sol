@@ -6,6 +6,7 @@ contract TicTacToe
     event Error(string error);
     event GameOver(string whoWon);
     uint constant pot = 5 ether;
+    address public owner;
 
     modifier rightAmountPaid {
         if(msg.value != pot){
@@ -15,10 +16,20 @@ contract TicTacToe
         }
     }
 
+    modifier onlyOwner() {
+        require (msg.sender == owner);
+        _;
+    }
+
+    constructor () public {
+        owner = msg.sender;
+    }    
+
     struct Game
     {
         address opponent;
         bool isHostsTurn;
+        bool gameNotOver;
         uint turnNr;
         mapping(uint => mapping(uint => uint)) board;
     }
@@ -29,15 +40,13 @@ contract TicTacToe
         bal = address(this).balance;
     }
 
-    function hostNewGame() payable rightAmountPaid public
-    {
+    function hostNewGame() payable rightAmountPaid public {
         clearBoard(msg.sender);
         Game storage g = games[msg.sender];
         emit Log("successfully hosted Game!");
     }
 
-    function joinExistingGame(address host) payable rightAmountPaid public
-    {
+    function joinExistingGame(address host) payable rightAmountPaid public {
         Game storage g = games[host];
         if(g.opponent == 0 && msg.sender != host)
         {
@@ -60,7 +69,7 @@ contract TicTacToe
             emit Error("You are not part of this game");
             return;
         }
-        if((g.isHostsTurn && player != 1) || (!g.isHostsTurn && player == 1)){
+        if((g.isHostsTurn && player != 1 && g.gameNotOver) || (!g.isHostsTurn && player == 1 && g.gameNotOver)){
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
@@ -68,33 +77,29 @@ contract TicTacToe
             {
                 g.board[row][column] = player;
                 g.turnNr ++;
-
-                if(youWon(host))
-                {
+                if(youWon(host)){
                     if(player == 1){
-                        //host.transfer(2*pot);
                         host.transfer(10 ether);
                         emit GameOver("host");
+                        g.gameNotOver = false;
                     }else{
-                        //g.opponent.transfer(2*pot);
                         g.opponent.transfer(10 ether);
                         emit GameOver("opponent");
+                        g.gameNotOver = false;
                     }
                     g.isHostsTurn = !g.isHostsTurn;
                     return;
                 }
 
-                if(isTie(host))
-                {
-                    //host.transfer(pot/2);
+                if(isTie(host)){
                     host.transfer(5 ether);
                     g.opponent.transfer(5 ether);
                     //g.opponent.transfer(pot/2);
                     g.isHostsTurn = !g.isHostsTurn;
                     emit GameOver("tie");
+                    g.gameNotOver = false;
                     return;
                 }
-
                 emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
                 return;
@@ -105,9 +110,8 @@ contract TicTacToe
         }
     }
 
-    function youWon(address host) public view returns (bool didYouWin)
-    //do not have to check who won because you can only win if its your turn.
-    {
+    function youWon(address host) public view returns (bool didYouWin){
+    //check who won not needed because you can only win if its your turn.
         Game storage g = games[host];
         for (uint i; i < 3; i++){
             if(g.board[i][0] != 0 && g.board[i][0] == g.board[i][1] && g.board[i][1] == g.board[i][2] ){
@@ -126,38 +130,40 @@ contract TicTacToe
         return false;
     }
 
-    function isTie(address host) internal view returns (bool isItATie)
-    {
-        //does not work yet, because check at play doesnt make sense!
+    function isTie(address host) internal view returns (bool isItATie){
         Game storage g = games[host];
         if(g.turnNr > 8){
             return true;
         }
     }
 
-    function clearBoard(address host) internal
-    {
+    function clearBoard(address host) internal{
         Game storage g = games[host];
         delete g.board[0][0];
         delete g.board[0][1];
         delete g.board[0][2];
-        delete  g.board[1][0];
+        delete g.board[1][0];
         delete g.board[1][1];
         delete g.board[1][2];
         delete g.board[2][0];
-        delete  g.board[2][1];
+        delete g.board[2][1];
         delete g.board[2][2];
         delete g.opponent;
         delete g.isHostsTurn;
         delete g.turnNr;
+        delete g.gameNotOver;
     }
 
-    function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
-    {
+    function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3){
         Game storage g = games[host];
         board1 = (999000 + 100 * (g.board[0][0])) + (10 * (g.board[0][1])) + (g.board[0][2]);
         board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
         board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
         _isHostsTurn = g.isHostsTurn;
+    }
+
+    function withdraw() public onlyOwner {
+        require(address(this).balance > 0);
+        owner.transfer(address(this).balance);
     }
 }
