@@ -40,8 +40,8 @@ click on the connect button with remix
 + Tictactoe as square
 
 Done:   
--Contract owner can get money left in the contract
--Game over so you cant continue playing
++ Contract owner can get money left in the contract
++ Game over so you cant continue playing
 
 ## Things that could be improved
 + Once you hosted, you cannot get your money back. (this is the business model).    
