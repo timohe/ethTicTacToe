@@ -1,20 +1,26 @@
-pragma solidity ^0.4.21;
+\documentclass[11pt]{article}
+\usepackage{fancyvrb}
 
-contract TicTacToe
-{
-    event Log(string log);
-    event Error(string error);
-    event GameOver(string whoWon);
-    uint constant pot = 5 ether;
+\title{Tic Tac Toe using Ethereum Smart Contracts}
+\date{2018\\ May}
+\author{Timo Hegnauer
+\and Lenz Baumann
+\and Cyrill Halter}
+\begin{document}
 
-    modifier rightAmountPaid {
-        if(msg.value != pot){
-            emit Error("You need to make a transaction of 5 eth...only paid ");
-        }else{
-            _;
-        }
-    }
+\maketitle
+This report documents the implementation of the \emph{Tic Tac Toe} game logic by means of an \emph{Ethereum Smart Contract} written in the \emph{Solidity} programming language. The smart contract should be compilable with the \emph{SOLC} compiler version \texttt{>= 0.4.21}.
 
+\section{Functionality}
+The smart contract supports the following functionality:
+\begin{enumerate}
+	\item The full \emph{Tic Tac Toe} game logic is implemented entirely within the smart contract and can be accessed either via the \emph{GETH} console or a custom web interface.
+	\item The smart contract is able to store and operate multiple games at the same time.
+	\item A betting system was implemented where each player has to pay a wager of 5 ether in order to join a game. The winner is awarded the entire pot of 10 ether. In case of a tie the pot is split up equally between the two players.
+\end{enumerate}
+
+\section{The Game Struct}
+\begin{Verbatim}[fontsize=\small]
     struct Game
     {
         address opponent;
@@ -24,21 +30,27 @@ contract TicTacToe
     }
 
     mapping (address => Game) games;
+\end{Verbatim}
 
-    function paycontract() public payable {
-    }
-
-    function getBalance() public view returns(uint bal) {
-        bal = address(this).balance;
-    }
-
+\section{Hosting and Joining a New Game}
+\begin{Verbatim}[fontsize=\small]
     function hostNewGame() payable rightAmountPaid public
     {
         clearBoard(msg.sender);
         Game storage g = games[msg.sender];
         emit Log("successfully hosted Game!");
     }
+    
+    modifier rightAmountPaid {
+        if(msg.value != pot){
+            emit Error("You need to make a transaction of 5 eth...");
+        }else{
+            _;
+        }
+    }
+\end{Verbatim}
 
+\begin{Verbatim}[fontsize=\small]
     function joinExistingGame(address host) payable rightAmountPaid public
     {
         Game storage g = games[host];
@@ -48,7 +60,10 @@ contract TicTacToe
         }
         emit Log("successfully joined Game!");
     }
+\end{Verbatim}
 
+\section{Playing a Move}
+\begin{Verbatim}[fontsize=\small]
     function play(address host, uint row, uint column) public{
         Game storage g = games[host];
         uint player;
@@ -67,7 +82,8 @@ contract TicTacToe
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
-            if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0)
+            if(row >= 0 && row < 3 && column >= 0 && column < 3 
+            	&& g.board[row][column] == 0)
             {
                 g.board[row][column] = player;
                 g.turnNr ++;
@@ -103,27 +119,35 @@ contract TicTacToe
             }
         }
     }
+\end{Verbatim}
 
+\begin{Verbatim}[fontsize=\small]
     function youWon(address host) public view returns (bool didYouWin)
     {
         Game storage g = games[host];
         for (uint i; i < 3; i++){
-            if(g.board[i][0] != 0 && g.board[i][0] == g.board[i][1] && g.board[i][1] == g.board[i][2] ){
+            if(g.board[i][0] != 0 && g.board[i][0] == g.board[i][1] && 
+            	g.board[i][1] == g.board[i][2] ){
                 return true;
             }
-            if(g.board[0][i] != 0 && g.board[0][i] == g.board[1][i] && g.board[1][i] == g.board[2][i]){
+            if(g.board[0][i] != 0 && g.board[0][i] == g.board[1][i] && 
+            	g.board[1][i] == g.board[2][i]){
                 return true;
             }
         }
-        if(g.board[0][0] != 0 && g.board[0][0] == g.board[1][1] && g.board[1][1] == g.board[2][2]){
+        if(g.board[0][0] != 0 && g.board[0][0] == g.board[1][1] && 
+        	g.board[1][1] == g.board[2][2]){
             return true;
         }
-        if(g.board[2][0] != 0 && g.board[2][0] == g.board[1][1] && g.board[1][1] == g.board[0][2]){
+        if(g.board[2][0] != 0 && g.board[2][0] == g.board[1][1] && 
+        	g.board[1][1] == g.board[0][2]){
             return true;
         }
         return false;
     }
+\end{Verbatim}
 
+\begin{Verbatim}[fontsize=\small]
     function isTie(address host) internal view returns (bool isItATie)
     {
         Game storage g = games[host];
@@ -131,30 +155,43 @@ contract TicTacToe
             return true;
         }
     }
+\end{Verbatim}
 
+\section{Some Helper Functions}
+\begin{Verbatim}[fontsize=\small]
     function clearBoard(address host) internal
     {
         Game storage g = games[host];
         delete g.board[0][0];
         delete g.board[0][1];
         delete g.board[0][2];
-        delete g.board[1][0];
+        delete  g.board[1][0];
         delete g.board[1][1];
         delete g.board[1][2];
         delete g.board[2][0];
-        delete g.board[2][1];
+        delete  g.board[2][1];
         delete g.board[2][2];
         delete g.opponent;
         delete g.isHostsTurn;
         delete g.turnNr;
     }
+\end{Verbatim}
 
-    function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3)
+\begin{Verbatim}[fontsize=\small]
+    function printBoard(address host) public view returns (bool _isHostsTurn, 
+    	uint board1, uint board2, uint board3)
     {
         Game storage g = games[host];
-        board1 = (999000 + 100 * (g.board[0][0])) + (10 * (g.board[0][1])) + (g.board[0][2]);
-        board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
-        board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
+        board1 = (999000 + 100 * (g.board[0][0])) + (10 * (g.board[0][1])) + 
+        	(g.board[0][2]);
+        board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + 
+        	(g.board[1][2]);
+        board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + 
+        	(g.board[2][2]);
         _isHostsTurn = g.isHostsTurn;
     }
-}
+
+\end{Verbatim}
+
+
+\end{document}
