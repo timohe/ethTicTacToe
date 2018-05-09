@@ -180,6 +180,7 @@ var userAddressesArray;
 var playerOnTurn;
 var userAddress;
 var hostAddress;
+var accountBalance;
 var boardArray = [];
 var boolArray = [];
 setAddressArrayAndInit();
@@ -192,6 +193,7 @@ var answer = setInterval(function () {
 	if (!isRefreshPaused) {
 		if (game_hosted && opp_has_joined)
 			refreshBoard();
+            updateAccountBalance();
 	}
 }, 1);
 
@@ -226,23 +228,37 @@ function populateAddressDropdown() {
 		var address = itemArray[i];
 		web3.eth.getBalance(address).then(getAddressItemsSetter(address));
 	}
+    userAddress = itemArray[0];
+    updateAccountBalance();
 }
 
 function getAddressItemsSetter(address) {
 	return function (balance) {
 		var addressItems = document.getElementById("addressDropdown");
 		var el = document.createElement("option");
-		var opt = address + ";  bal: " + web3.utils.fromWei(balance);
+		var opt = address;
 		el.textContent = opt;
 		el.value = address;
 		addressItems.appendChild(el);
 	}
 }
 
+function updateAccountBalance() {
+    web3.eth.getBalance(userAddress).then(setCurrentUserBalance(userAddress));
+}
+
+function setCurrentUserBalance(userAddress){
+    return function(balance){
+        accountBalance = web3.utils.fromWei(balance);
+        document.getElementById('accountBalance').innerHTML = accountBalance;
+    }
+}
+
 function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
 	userAddress = userAddress.toLowerCase();
 	console.log("User address changed to: " + userAddress);
+    updateAccountBalance();
 }
 
 function host() {

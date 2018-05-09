@@ -4,6 +4,7 @@ table {
     width: auto;
 }
 
+
 td {
     border: 1px solid white;
     width:10vw;
@@ -20,6 +21,10 @@ td {
 
 #Actions{
     text-align: center;
+}
+
+.browser-default{
+        width: 60%;
 }
 
 td:after {
