@@ -32,7 +32,8 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 1. install remixd     
 `$ npm install -g remixd`   
 `$ remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.`   
-click on the connect button with remix 
+
+2. click on the connect button with remix 
 
 ## To do
 + Say who is the winner in the text above the board
