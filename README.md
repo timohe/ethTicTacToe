@@ -31,7 +31,7 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 ## Connect Remix with local folder
 1. install remixd     
 `$ npm install -g remixd`   
-`$ remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.`   
+`$ e.g. remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.`   
 
 2. click on the connect button with remix 
 

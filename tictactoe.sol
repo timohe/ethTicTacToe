@@ -69,11 +69,11 @@ contract TicTacToe
             emit Error("You are not part of this game");
             return;
         }
-        if((g.isHostsTurn && player != 1 && g.gameNotOver) || (!g.isHostsTurn && player == 1 && g.gameNotOver)){
+        if((g.isHostsTurn && player != 1) || (!g.isHostsTurn && player == 1)){
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
-            if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0)
+            if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0 && g.gameNotOver)
             {
                 g.board[row][column] = player;
                 g.turnNr ++;
