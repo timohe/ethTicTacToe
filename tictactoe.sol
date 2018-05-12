@@ -43,6 +43,7 @@ contract TicTacToe
     function hostNewGame() payable rightAmountPaid public {
         clearBoard(msg.sender);
         Game storage g = games[msg.sender];
+        g.gameNotOver = true;
         emit Log("successfully hosted Game!");
     }
 
@@ -57,6 +58,10 @@ contract TicTacToe
 
     function play(address host, uint row, uint column) public{
         Game storage g = games[host];
+        if(!g.gameNotOver){
+            emit Error("The game is Over");
+            return;
+        }
         uint player;
         if(msg.sender == host){
             emit Log("executing move for host");
@@ -73,7 +78,7 @@ contract TicTacToe
             emit Error("Its not your turn! Wait for your opponent to play");
             return;
         }else{
-            if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0 && g.gameNotOver)
+            if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0)
             {
                 g.board[row][column] = player;
                 g.turnNr ++;

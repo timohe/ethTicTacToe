@@ -175,6 +175,7 @@ var gasToSend = 1000000;
 var opp_has_joined = false;
 var game_hosted = false;
 var isRefreshPaused = true;
+var gameOver = false;
 
 var answer = setInterval(function () {
 	if (!isRefreshPaused) {
@@ -294,26 +295,27 @@ function play(row, col) {
 			if (receipt.events && receipt.events.GameOver && receipt.events.GameOver.returnValues) {
 				if (receipt.events.GameOver.returnValues[0] === "host") {
 					if (userAddress === hostAddress) {
+						gameOver = true;
 						alert("You won the game. The money was sent to your address!");
-						document.querySelector('.playerOnTurn').innerHTML = "Game is over. You won!";
 
 					} else {
 						alert("You suck and lost the game :(. ");
-						document.querySelector('.playerOnTurn').innerHTML = "Game is over. You lost!";
+						gameOver = true;
 					}
 				}
 				if (receipt.events.GameOver.returnValues[0] === "opponent") {
 					if (userAddress === hostAddress) {
-						alert("You suck and lost the game :(. ");
-						document.querySelector('.playerOnTurn').innerHTML = "Game is over. You lost!";
+						gameOver = true;
+						alert("You lost the game and a 5 ether :(. ");
+						
 					} else {
+						gameOver = true;
 						alert("You won the game. The money was sent to your address!");
-						document.querySelector('.playerOnTurn').innerHTML = "Game is over. You won!";
 					}
 				}
 				if (receipt.events.GameOver.returnValues[0] === "tie") {
-					alert("Game is over. Nobody won so you both got your money back");
 					document.querySelector('.playerOnTurn').innerHTML = "Game is over. It was a Tie!";
+					alert("Game is over. Nobody won so you both got your money back");
 				}
 			}
 			isRefreshPaused = false;
@@ -364,22 +366,30 @@ function refreshBoard() {
 			document.querySelector('.field7').innerHTML = boolArray[6];
 			document.querySelector('.field8').innerHTML = boolArray[7];
 			document.querySelector('.field9').innerHTML = boolArray[8];
-
-			if (result._isHostsTurn == true && (userAddress == hostAddress)) {
-				document.querySelector('.playerOnTurn').innerHTML = "Its your turn!!!"
+			if (gameOver) {
+				document.querySelector('.playerOnTurn').innerHTML = "The game is over!!";
+				return
+			}
+			else if (result._isHostsTurn == true && (userAddress == hostAddress)) {
+				document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
+				return
 			}
 			else if (result._isHostsTurn == true && (userAddress != hostAddress)) {
-				document.querySelector('.playerOnTurn').innerHTML = "Its your opponents turn!!!"
+				document.querySelector('.playerOnTurn').innerHTML = "Wait for your opponents move!";
+				return;
 			}
 			else if (result._isHostsTurn == false && (userAddress == hostAddress)) {
-				document.querySelector('.playerOnTurn').innerHTML = "Its your opponents turn!!!"
+				document.querySelector('.playerOnTurn').innerHTML = "Wait for your opponents move!";
+				return;
 			}
 			else if (result._isHostsTurn == false && (userAddress != hostAddress)) {
-				document.querySelector('.playerOnTurn').innerHTML = "Its your turn!!!"
+				document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
+				return;
 			}
+			
 			else {
-				document.querySelector('.playerOnTurn').innerHTML = "Noooooo clueeeeeeee!!!"
-
+				document.querySelector('.playerOnTurn').innerHTML = "Noooooo clueeeeeeee!!!";
+				return;
 			}
 		});
 }
