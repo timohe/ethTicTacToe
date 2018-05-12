@@ -3,68 +3,12 @@ web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
 var contractAddr; //can be hardcoded after deploy
 var contractAbi = [
 		{
-			"constant": true,
-			"inputs": [],
-			"name": "getBalance",
-			"outputs": [
-				{
-					"name": "bal",
-					"type": "uint256"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [],
-			"name": "withdraw",
-			"outputs": [],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": true,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
-				}
-			],
-			"name": "youWon",
-			"outputs": [
-				{
-					"name": "didYouWin",
-					"type": "bool"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
 			"constant": false,
 			"inputs": [],
 			"name": "hostNewGame",
 			"outputs": [],
 			"payable": true,
 			"stateMutability": "payable",
-			"type": "function"
-		},
-		{
-			"constant": true,
-			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"name": "",
-					"type": "address"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
 			"type": "function"
 		},
 		{
@@ -80,65 +24,6 @@ var contractAbi = [
 			"payable": true,
 			"stateMutability": "payable",
 			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
-				},
-				{
-					"name": "row",
-					"type": "uint256"
-				},
-				{
-					"name": "column",
-					"type": "uint256"
-				}
-			],
-			"name": "play",
-			"outputs": [],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": true,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
-				}
-			],
-			"name": "printBoard",
-			"outputs": [
-				{
-					"name": "_isHostsTurn",
-					"type": "bool"
-				},
-				{
-					"name": "board1",
-					"type": "uint256"
-				},
-				{
-					"name": "board2",
-					"type": "uint256"
-				},
-				{
-					"name": "board3",
-					"type": "uint256"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "constructor"
 		},
 		{
 			"anonymous": false,
@@ -175,6 +60,71 @@ var contractAbi = [
 			],
 			"name": "GameOver",
 			"type": "event"
+		},
+		{
+			"constant": false,
+			"inputs": [
+				{
+					"name": "host",
+					"type": "address"
+				},
+				{
+					"name": "row",
+					"type": "uint256"
+				},
+				{
+					"name": "column",
+					"type": "uint256"
+				}
+			],
+			"name": "play",
+			"outputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"inputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "constructor"
+		},
+		{
+			"constant": false,
+			"inputs": [],
+			"name": "withdraw",
+			"outputs": [],
+			"payable": false,
+			"stateMutability": "nonpayable",
+			"type": "function"
+		},
+		{
+			"constant": true,
+			"inputs": [],
+			"name": "getBalance",
+			"outputs": [
+				{
+					"name": "bal",
+					"type": "uint256"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function"
+		},
+		{
+			"constant": true,
+			"inputs": [],
+			"name": "owner",
+			"outputs": [
+				{
+					"name": "",
+					"type": "address"
+				}
+			],
+			"payable": false,
+			"stateMutability": "view",
+			"type": "function"
 		}
 	
 ];
