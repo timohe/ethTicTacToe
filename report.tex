@@ -17,7 +17,7 @@ The smart contract supports the following functionality:
 	\item The full \emph{Tic Tac Toe} game logic is implemented entirely within the smart contract and can be accessed either via the \emph{GETH} console or a custom web interface.
 	\item The smart contract is able to store and operate multiple games at the same time.
 	\item A betting system was implemented where each player has to pay a wager of 5 ether in order to join a game. The winner is awarded the entire pot of 10 ether. In case of a tie the pot is split up equally between the two players.
-	\item A business model was developed that allows for the exploitation of those people that are naive enough to spend 5 ether on a game of \emph{Tic Tac Toe}.
+	\item A business model was developed that allows for the exploitation of those people that are naive enough to spend 5 ether on a game of \emph{Tic Tac Toe} without reading the contract.
 \end{enumerate}
 
 \section{The Game Struct}
@@ -142,6 +142,7 @@ The \texttt{isTie} method evaluates whether the game has ended in a tie by check
 
 \section{Exploiting the Rich and Naive}
 5 ether is a lot to spend on a single game of \emph{Tic Tac Toe}. It can therefore be expected that only those with money to spare (or rather throw away) will be willing to participate in a game with stakes as high as these. To profit from this, the \texttt{withdraw} method allows the owner of the contract to extract the funds that belong to the smart contract. This is, for one, to gain access to ethers that may have been left over from a game that was never ended, but also to blatantly steal from those rich enough to play a game of \emph{Tic Tac Toe} for 5 ether with the intent of redistributing the gained money in a robbin-hood-esque fashion.
+\newline Furthermore, this contract has an educational value for people blindly trusting often called "trust-free" blockchain applications and creates awarness of the consequence of such behaviour.
 \begin{Verbatim}[fontsize=\small]
     constructor () public {
         owner = msg.sender;
