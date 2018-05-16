@@ -212,6 +212,7 @@ var accountBalance;
 var boardArray = [];
 var boolArray = [];
 var gameOver = false;
+var gasToSend = 1000000;
 
 //initialize addresses which are available to user
 function setAddressArrayAndInit() {
@@ -339,7 +340,7 @@ function changeUserAddress() {
 function host() {
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
-	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact })
+	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact, gas: gasToSend })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 			displayBoard();
@@ -354,7 +355,7 @@ function joinExistingGame() {
 	hostAddress = document.getElementById("hostAddress").value;
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
-	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact })
+	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact, gas: gasToSend })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 			displayBoard();
@@ -367,7 +368,7 @@ function joinExistingGame() {
 function play(row, col) {
 	if(!gameOver){
 		console.log("Making move...");
-		contract.methods.play(hostAddress, row, col).send({ from: userAddress })
+		contract.methods.play(hostAddress, row, col).send({ from: userAddress, gas: gasToSend })
 			.on('receipt', function (receipt) {
 				console.log(receipt);
 			})
@@ -467,7 +468,7 @@ function cellClick(cell) {
 }
 
 function clearBoard() {
-	contract.methods.clearBoard(hostAddress).send({ from: userAddress})
+	contract.methods.clearBoard(hostAddress).send({ from: userAddress, gas: gasToSend})
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 		})
