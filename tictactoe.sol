@@ -165,8 +165,7 @@ contract TicTacToe
         board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
         board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
         _isHostsTurn = g.isHostsTurn;
-        _opponent = g.opponent
-        
+        _opponent = g.opponent;
     }
 
     function withdraw() public onlyOwner {
