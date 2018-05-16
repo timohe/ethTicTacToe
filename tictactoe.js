@@ -2,29 +2,51 @@ const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8546'
 
 var contractAddr; //can be hardcoded after deploy
 var contractAbi = [
-
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "getBalance",
-		"outputs": [
+		"anonymous": false,
+		"inputs": [
 			{
-				"name": "bal",
-				"type": "uint256"
+				"indexed": false,
+				"name": "host",
+				"type": "address"
 			}
 		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+		"name": "TriggerBoardRefresh",
+		"type": "event"
 	},
 	{
-		"constant": false,
-		"inputs": [],
-		"name": "withdraw",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "host",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "whoWon",
+				"type": "string"
+			}
+		],
+		"name": "GameOver",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "log",
+				"type": "string"
+			}
+		],
+		"name": "HostedGame",
+		"type": "event"
 	},
 	{
 		"constant": false,
@@ -36,18 +58,38 @@ var contractAbi = [
 		"type": "function"
 	},
 	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
+		"anonymous": false,
+		"inputs": [
 			{
-				"name": "",
+				"indexed": false,
+				"name": "sender",
 				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "log",
+				"type": "string"
 			}
 		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
+		"name": "JoinedGame",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "error",
+				"type": "string"
+			}
+		],
+		"name": "Error",
+		"type": "event"
 	},
 	{
 		"constant": false,
@@ -86,6 +128,49 @@ var contractAbi = [
 		"type": "function"
 	},
 	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"name": "bal",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
 		"constant": true,
 		"inputs": [
 			{
@@ -115,51 +200,7 @@ var contractAbi = [
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
-	},
-	{
-		"inputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "log",
-				"type": "string"
-			}
-		],
-		"name": "Log",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "error",
-				"type": "string"
-			}
-		],
-		"name": "Error",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "whoWon",
-				"type": "string"
-			}
-		],
-		"name": "GameOver",
-		"type": "event"
 	}
-
-
 ];
 
 var contract;
@@ -170,40 +211,9 @@ var hostAddress;
 var accountBalance;
 var boardArray = [];
 var boolArray = [];
-setAddressArrayAndInit();
-var gasToSend = 1000000;
-var opp_has_joined = false;
-var game_hosted = false;
-var isRefreshPaused = true;
 var gameOver = false;
 
-var answer = setInterval(function () {
-	if (!isRefreshPaused) {
-		if (game_hosted && opp_has_joined)
-			refreshBoard();
-		updateAccountBalance();
-	}
-}, 1000);
-
-window.onload = function () {
-	var elem = document.getElementById("contractAddress");
-	elem.addEventListener("blur", getContractAddressSetter(), true);
-	getContractAddressSetter()();
-	hideBoard();
-};
-
-function listenEvents(){	
-	contract.events.Log({ fromBlock: 'latest' }, function(error, event){ console.log("This is the received event: "+JSON.stringify(event)); })
-	
-}
-
-function getContractAddressSetter() {
-	return function () {
-		contractAddr = document.getElementById("contractAddress").value;
-		contract = new web3.eth.Contract(contractAbi, contractAddr);
-	}
-}
-
+//initialize addresses which are available to user
 function setAddressArrayAndInit() {
 	web3.eth.getAccounts().then(function (result) {
 		userAddressesArray = result;
@@ -212,6 +222,77 @@ function setAddressArrayAndInit() {
 		userAddress = userAddress.toLowerCase();
 	}).catch(function (error) {
 		console.log(error);
+	});
+};
+setAddressArrayAndInit();
+
+//define the contract and start listening to different incoming events
+window.onload = function () {
+	var elem = document.getElementById("contractAddress");
+	elem.addEventListener("blur", function () {
+		contractAddr = document.getElementById("contractAddress").value;
+		contract = new web3.eth.Contract(contractAbi, contractAddr);
+		listentoEvents();
+	}, true);
+	hideBoard();
+};
+
+function listentoEvents() {
+	console.log("listening to events...");
+	
+	contract.events.HostedGame({
+		fromBlock: 'latest',
+		filter: { sender: userAddress }
+	}, function (error, event) {
+		// + JSON.stringify(event.returnValues[1])
+		console.log("HostedGame event received!");
+		document.querySelector('.playerOnTurn').innerHTML = "Successfully hosted! Please wait for an opponent to join and make a move!";
+		gameOver = false;
+	});
+
+	contract.events.JoinedGame({
+		fromBlock: 'latest',
+		filter: { sender: userAddress }
+	}, function (error, event) {
+		// console.log("This is the received log-event: " + JSON.stringify(event.returnValues[1]));
+		console.log("JoinedGame event received!");
+		document.querySelector('.playerOnTurn').innerHTML = "Successfully joined! Make your first move!";
+		gameOver = false;
+	});
+
+	contract.events.TriggerBoardRefresh({
+		fromBlock: 'latest',
+		filter: { host: hostAddress }
+	}, function (error, event) {
+		console.log("TriggerBoardRefresh event received!");
+		refreshBoard();
+	});
+
+	contract.events.GameOver({
+		fromBlock: 'latest',
+		filter: { sender: hostAddress }
+	}, function (error, event) {
+		console.log("This is the received log-event: " + JSON.stringify(event.returnValues[1]));
+		document.querySelector('.playerOnTurn').innerHTML = "Game is over!";
+		gameOver = true;
+		if (event.returnValues[1] === "opponent") {
+			if (userAddress === hostAddress) {
+				alert("You lost the game and a 5 ether :(. ");
+			} else {
+				alert("You won the game. The money was sent to your address!");
+			}
+		}
+		if (event.returnValues[1] === "host") {
+			if (userAddress === hostAddress) {
+				alert("You won the game. The money was sent to your address!");
+
+			} else {
+				alert("You suck and lost the game :(. ");
+			}
+		}
+		if (event.returnValues[1] === "tie") {
+			alert("Game is over. Nobody won so you both got your money back");
+		}
 	});
 }
 
@@ -252,90 +333,56 @@ function changeUserAddress() {
 	userAddress = userAddress.toLowerCase();
 	console.log("User address changed to: " + userAddress);
 	updateAccountBalance();
+	refreshBoard();
 }
 
 function host() {
-	isRefreshPaused = true;
-	gameOver = false;
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
-	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact, gas: gasToSend })
+	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact })
 		.on('receipt', function (receipt) {
-			console.log("Transaction successfull, receipt:");
 			console.log(receipt);
-			game_hosted = true;
-			document.querySelector('.playerOnTurn').innerHTML = "Please wait for an opponent to join and make a move!";
 			displayBoard();
 		})
 		.on('error', function (error) {
 			console.log(error)
 		});
 	hostAddress = userAddress;
-	isRefreshPaused = false;
 };
 
 function joinExistingGame() {
-	isRefreshPaused = true;
 	hostAddress = document.getElementById("hostAddress").value;
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
-	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact, gas: gasToSend })
+	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact })
 		.on('receipt', function (receipt) {
 			console.log(receipt);
-			opp_has_joined = true;
-			refreshBoard();
 			displayBoard();
 		})
 		.on('error', function (error) {
 			console.log(error);
 		})
-	isRefreshPaused = false;
 };
 
 function play(row, col) {
-	console.log("Making move...");
-	isRefreshPaused = true;
-	contract.methods.play(hostAddress, row, col).send({ from: userAddress, gas: gasToSend })
-		.on('receipt', function (receipt) {
-			console.log(receipt);
-			if (receipt.events && receipt.events.GameOver && receipt.events.GameOver.returnValues) {
-				if (receipt.events.GameOver.returnValues[0] === "host") {
-					if (userAddress === hostAddress) {
-						gameOver = true;
-						alert("You won the game. The money was sent to your address!");
-
-					} else {
-						alert("You suck and lost the game :(. ");
-						gameOver = true;
-					}
-				}
-				if (receipt.events.GameOver.returnValues[0] === "opponent") {
-					if (userAddress === hostAddress) {
-						gameOver = true;
-						alert("You lost the game and a 5 ether :(. ");
-
-					} else {
-						gameOver = true;
-						alert("You won the game. The money was sent to your address!");
-					}
-				}
-				if (receipt.events.GameOver.returnValues[0] === "tie") {
-					document.querySelector('.playerOnTurn').innerHTML = "Game is over. It was a Tie!";
-					alert("Game is over. Nobody won so you both got your money back");
-				}
-			}
-			isRefreshPaused = false;
-			refreshBoard();
-		})
-		.on('error', function (error) {
-			console.log(error);
-		})
+	if(!gameOver){
+		console.log("Making move...");
+		contract.methods.play(hostAddress, row, col).send({ from: userAddress })
+			.on('receipt', function (receipt) {
+				console.log(receipt);
+			})
+			.on('error', function (error) {
+				console.log(error);
+			})
+	}else{
+		alert("The game is over! Host or join a new game please!");
+	}
+	
 }
 
 function displayBoard() {
 	document.getElementById("gameBoard").style.display = "block";
 }
-
 function hideBoard() {
 	document.getElementById("gameBoard").style.display = "none";
 }
@@ -372,11 +419,8 @@ function refreshBoard() {
 			document.querySelector('.field7').innerHTML = boolArray[6];
 			document.querySelector('.field8').innerHTML = boolArray[7];
 			document.querySelector('.field9').innerHTML = boolArray[8];
-			if (gameOver) {
-				document.querySelector('.playerOnTurn').innerHTML = "The game is over!!";
-				return
-			}
-			else if (result._isHostsTurn == true && (userAddress == hostAddress)) {
+
+			if (result._isHostsTurn == true && (userAddress == hostAddress)) {
 				document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
 				return
 			}
@@ -392,7 +436,6 @@ function refreshBoard() {
 				document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
 				return;
 			}
-
 			else {
 				document.querySelector('.playerOnTurn').innerHTML = "Noooooo clueeeeeeee!!!";
 				return;
@@ -424,13 +467,11 @@ function cellClick(cell) {
 }
 
 function clearBoard() {
-	contract.methods.clearBoard(hostAddress).send({ from: userAddress, gas: gasToSend })
+	contract.methods.clearBoard(hostAddress).send({ from: userAddress})
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 		})
 		.on('error', function (error) {
 			console.log(error);
 		})
-	opp_has_joined = false;
-
 }

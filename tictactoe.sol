@@ -2,15 +2,17 @@ pragma solidity ^0.4.21;
 
 contract TicTacToe
 {
-    event Log(string log);
-    event Error(string error);
-    event GameOver(string whoWon);
+    event HostedGame(address sender ,string log);
+    event JoinedGame(address sender ,string log);
+    event Error(address sender ,string error);
+    event GameOver(address host ,string whoWon);
+    event TriggerBoardRefresh(address host);
     uint constant pot = 5 ether;
     address public owner;
 
     modifier rightAmountPaid {
         if(msg.value != pot){
-            emit Error("You need to make a transaction of 5 eth...only paid ");
+            emit Error(msg.sender, "You need to make a transaction of 5 eth...");
         }else{
             _;
         }
@@ -44,7 +46,7 @@ contract TicTacToe
         clearBoard(msg.sender);
         Game storage g = games[msg.sender];
         g.gameNotOver = true;
-        emit Log("successfully hosted Game!");
+        emit HostedGame(msg.sender, "successfully hosted Game!");
     }
 
     function joinExistingGame(address host) payable rightAmountPaid public {
@@ -53,43 +55,42 @@ contract TicTacToe
         {
             g.opponent = msg.sender;
         }
-        emit Log("successfully joined Game!");
+        emit JoinedGame(msg.sender, "successfully joined Game!");
     }
 
     function play(address host, uint row, uint column) public{
         Game storage g = games[host];
         if(!g.gameNotOver){
-            emit Error("The game is Over");
+            emit Error(msg.sender, "The game is Over");
             return;
         }
         uint player;
         if(msg.sender == host){
-            emit Log("executing move for host");
             player = 1;
         }
         else if(msg.sender == g.opponent){
-            emit Log("executing move for opponent");
             player = 2;
         } else{
-            emit Error("You are not part of this game");
+            emit Error(msg.sender, "You are not part of this game");
             return;
         }
         if((g.isHostsTurn && player != 1) || (!g.isHostsTurn && player == 1)){
-            emit Error("Its not your turn! Wait for your opponent to play");
+            emit Error(msg.sender, "Its not your turn! Wait for your opponent to play");
             return;
         }else{
             if(row >= 0 && row < 3 && column >= 0 && column < 3 && g.board[row][column] == 0)
             {
                 g.board[row][column] = player;
                 g.turnNr ++;
+                emit TriggerBoardRefresh(host);
                 if(youWon(host)){
                     if(player == 1){
                         host.transfer(10 ether);
-                        emit GameOver("host");
+                        emit GameOver(host, "host");
                         g.gameNotOver = false;
                     }else{
                         g.opponent.transfer(10 ether);
-                        emit GameOver("opponent");
+                        emit GameOver(host, "opponent");
                         g.gameNotOver = false;
                     }
                     g.isHostsTurn = !g.isHostsTurn;
@@ -100,16 +101,15 @@ contract TicTacToe
                     host.transfer(5 ether);
                     g.opponent.transfer(5 ether);
                     g.isHostsTurn = !g.isHostsTurn;
-                    emit GameOver("tie");
+                    emit GameOver(host, "tie");
                     g.gameNotOver = false;
                     return;
                 }
-                emit Log("move successfully applied");
                 g.isHostsTurn = !g.isHostsTurn;
                 return;
 
             } else {
-                emit Error("Your choice of field was not valid");
+                emit Error(msg.sender, "Your choice of field was not valid");
             }
         }
     }
