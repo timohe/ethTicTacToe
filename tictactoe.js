@@ -344,7 +344,6 @@ function changeUserAddress() {
 }
 
 function host() {
-	clearBoard();
 	document.querySelector('.playerOnTurn').innerHTML = "Hosting new game...";
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
@@ -352,9 +351,11 @@ function host() {
 		.on('receipt', function (receipt) {
 			console.log(receipt);
 			displayBoard();
+			refreshBoard();
 		})
 		.on('error', function (error) {
 			console.log(error)
+			refreshBoard();
 		});
 	hostAddress = userAddress;
 };
@@ -487,13 +488,13 @@ function cellClick(cell) {
 	}
 }
 
-function clearBoard() {
-	contract.methods.clearBoard(hostAddress).send({ from: userAddress, gas: gasToSend})
-		.on('receipt', function (receipt) {
-			console.log(receipt);
-			refreshBoard();
-		})
-		.on('error', function (error) {
-			console.log(error);
-		})
-}
+// function clearBoard() {
+// 	contract.methods.clearBoard(hostAddress).send({ from: userAddress, gas: gasToSend})
+// 		.on('receipt', function (receipt) {
+// 			console.log(receipt);
+// 			refreshBoard();
+// 		})
+// 		.on('error', function (error) {
+// 			console.log(error);
+// 		})
+// }
