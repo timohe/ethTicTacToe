@@ -240,7 +240,12 @@ window.onload = function () {
 		listentoEvents();
 	}, true);
 	hideBoard();
+	updateBalance();
 };
+
+function updateBalance() {
+    setInterval(function(){ updateAccountBalance(); }, 3000);
+}
 
 function listentoEvents() {
 	console.log("listening to events...");
@@ -394,6 +399,8 @@ function hideBoard() {
 }
 
 function refreshBoard() {
+	//dont refresh if the contract is not yet defined
+	if(!contract){return;};
 	contract.methods.printBoard(hostAddress).call()
 		.then(function (result) {
 			boardArray[0] = parseInt(result.board1.substring(3, 4));
