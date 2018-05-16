@@ -3,7 +3,9 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 
 ## Get environment ready
 1. open geth        
-`$ geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpccorsdomain="*" --rpcapi eth,web3,personal,net,miner,admin`
+`$ geth --datadir ~/privateEthTestnet --networkid 3107 --fast --rpc --rpccorsdomain="*" --rpcapi eth,web3,personal,net,miner,admin --ws --wsaddr "localhost" --wsport "8545" --wsorigins "*"`
+
+geth --rpcapi "db,eth,net,web3,personal" --ws --wsaddr "localhost" --wsport "8545" --wsorigins "*" --identity "MyTestNode" --datadir "./data" --testnet --fast
 
 2. attach new instance (new terminal):    
 `$ geth attach http://127.0.0.1:8545`
@@ -43,3 +45,7 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 
 ## Important commands
 `web3.fromWei(eth.getBalance(eth.accounts[1]), "ether")`
+
+## Sources used:
+for events: https://github.com/ethereum/web3.js/issues/989
+get events: https://stackoverflow.com/questions/48608398/subscribing-to-a-solidity-event-from-frontend

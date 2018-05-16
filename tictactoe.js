@@ -1,165 +1,165 @@
-web3 = new Web3(new Web3.providers.HttpProvider("http://localhost:8545"));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('http://127.0.0.1:8545'));
 
 var contractAddr; //can be hardcoded after deploy
 var contractAbi = [
-	
-		{
-			"constant": true,
-			"inputs": [],
-			"name": "getBalance",
-			"outputs": [
-				{
-					"name": "bal",
-					"type": "uint256"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [],
-			"name": "withdraw",
-			"outputs": [],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [],
-			"name": "hostNewGame",
-			"outputs": [],
-			"payable": true,
-			"stateMutability": "payable",
-			"type": "function"
-		},
-		{
-			"constant": true,
-			"inputs": [],
-			"name": "owner",
-			"outputs": [
-				{
-					"name": "",
-					"type": "address"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
-				}
-			],
-			"name": "joinExistingGame",
-			"outputs": [],
-			"payable": true,
-			"stateMutability": "payable",
-			"type": "function"
-		},
-		{
-			"constant": false,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
-				},
-				{
-					"name": "row",
-					"type": "uint256"
-				},
-				{
-					"name": "column",
-					"type": "uint256"
-				}
-			],
-			"name": "play",
-			"outputs": [],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "function"
-		},
-		{
-			"constant": true,
-			"inputs": [
-				{
-					"name": "host",
-					"type": "address"
-				}
-			],
-			"name": "printBoard",
-			"outputs": [
-				{
-					"name": "_isHostsTurn",
-					"type": "bool"
-				},
-				{
-					"name": "board1",
-					"type": "uint256"
-				},
-				{
-					"name": "board2",
-					"type": "uint256"
-				},
-				{
-					"name": "board3",
-					"type": "uint256"
-				}
-			],
-			"payable": false,
-			"stateMutability": "view",
-			"type": "function"
-		},
-		{
-			"inputs": [],
-			"payable": false,
-			"stateMutability": "nonpayable",
-			"type": "constructor"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": false,
-					"name": "log",
-					"type": "string"
-				}
-			],
-			"name": "Log",
-			"type": "event"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": false,
-					"name": "error",
-					"type": "string"
-				}
-			],
-			"name": "Error",
-			"type": "event"
-		},
-		{
-			"anonymous": false,
-			"inputs": [
-				{
-					"indexed": false,
-					"name": "whoWon",
-					"type": "string"
-				}
-			],
-			"name": "GameOver",
-			"type": "event"
-		}
-	
-	
+
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
+			{
+				"name": "bal",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [],
+		"name": "hostNewGame",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
+			{
+				"name": "",
+				"type": "address"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "host",
+				"type": "address"
+			}
+		],
+		"name": "joinExistingGame",
+		"outputs": [],
+		"payable": true,
+		"stateMutability": "payable",
+		"type": "function"
+	},
+	{
+		"constant": false,
+		"inputs": [
+			{
+				"name": "host",
+				"type": "address"
+			},
+			{
+				"name": "row",
+				"type": "uint256"
+			},
+			{
+				"name": "column",
+				"type": "uint256"
+			}
+		],
+		"name": "play",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
+	},
+	{
+		"constant": true,
+		"inputs": [
+			{
+				"name": "host",
+				"type": "address"
+			}
+		],
+		"name": "printBoard",
+		"outputs": [
+			{
+				"name": "_isHostsTurn",
+				"type": "bool"
+			},
+			{
+				"name": "board1",
+				"type": "uint256"
+			},
+			{
+				"name": "board2",
+				"type": "uint256"
+			},
+			{
+				"name": "board3",
+				"type": "uint256"
+			}
+		],
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "log",
+				"type": "string"
+			}
+		],
+		"name": "Log",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "error",
+				"type": "string"
+			}
+		],
+		"name": "Error",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "whoWon",
+				"type": "string"
+			}
+		],
+		"name": "GameOver",
+		"type": "event"
+	}
+
+
 ];
 
 var contract;
@@ -181,7 +181,7 @@ var answer = setInterval(function () {
 	if (!isRefreshPaused) {
 		if (game_hosted && opp_has_joined)
 			refreshBoard();
-            updateAccountBalance();
+		updateAccountBalance();
 	}
 }, 1000);
 
@@ -191,6 +191,10 @@ window.onload = function () {
 	getContractAddressSetter()();
 	hideBoard();
 };
+
+function listenEvents(){	
+	contract.events.allEvents({ fromBlock: 'latest' }, console.log)
+}
 
 function getContractAddressSetter() {
 	return function () {
@@ -216,8 +220,8 @@ function populateAddressDropdown() {
 		var address = itemArray[i];
 		web3.eth.getBalance(address).then(getAddressItemsSetter(address));
 	}
-    userAddress = itemArray[0];
-    updateAccountBalance();
+	userAddress = itemArray[0];
+	updateAccountBalance();
 }
 
 function getAddressItemsSetter(address) {
@@ -232,21 +236,21 @@ function getAddressItemsSetter(address) {
 }
 
 function updateAccountBalance() {
-    web3.eth.getBalance(userAddress).then(setCurrentUserBalance(userAddress));
+	web3.eth.getBalance(userAddress).then(setCurrentUserBalance(userAddress));
 }
 
-function setCurrentUserBalance(userAddress){
-    return function(balance){
-        accountBalance = web3.utils.fromWei(balance);
-        document.getElementById('accountBalance').innerHTML = accountBalance;
-    }
+function setCurrentUserBalance(userAddress) {
+	return function (balance) {
+		accountBalance = web3.utils.fromWei(balance);
+		document.getElementById('accountBalance').innerHTML = accountBalance;
+	}
 }
 
 function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
 	userAddress = userAddress.toLowerCase();
 	console.log("User address changed to: " + userAddress);
-    updateAccountBalance();
+	updateAccountBalance();
 }
 
 function host() {
@@ -308,7 +312,7 @@ function play(row, col) {
 					if (userAddress === hostAddress) {
 						gameOver = true;
 						alert("You lost the game and a 5 ether :(. ");
-						
+
 					} else {
 						gameOver = true;
 						alert("You won the game. The money was sent to your address!");
@@ -387,7 +391,7 @@ function refreshBoard() {
 				document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
 				return;
 			}
-			
+
 			else {
 				document.querySelector('.playerOnTurn').innerHTML = "Noooooo clueeeeeeee!!!";
 				return;
@@ -426,4 +430,6 @@ function clearBoard() {
 		.on('error', function (error) {
 			console.log(error);
 		})
+	opp_has_joined = false;
+
 }
