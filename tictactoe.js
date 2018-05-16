@@ -274,25 +274,23 @@ function listentoEvents() {
 		filter: { sender: hostAddress }
 	}, function (error, event) {
 		console.log("This is the received log-event: " + JSON.stringify(event.returnValues[1]));
-		document.querySelector('.playerOnTurn').innerHTML = "Game is over!";
 		gameOver = true;
 		if (event.returnValues[1] === "opponent") {
 			if (userAddress === hostAddress) {
-				alert("You lost the game and a 5 ether :(. ");
+				document.querySelector('.playerOnTurn').innerHTML = "You lost the game and 5 ether :(.";
 			} else {
-				alert("You won the game. The money was sent to your address!");
+				document.querySelector('.playerOnTurn').innerHTML = "You won the game. The money was sent to your address!"
 			}
 		}
 		if (event.returnValues[1] === "host") {
 			if (userAddress === hostAddress) {
-				alert("You won the game. The money was sent to your address!");
-
+				document.querySelector('.playerOnTurn').innerHTML = "You won the game. The money was sent to your address!"
 			} else {
-				alert("You suck and lost the game :(. ");
+				document.querySelector('.playerOnTurn').innerHTML = "You lost the game and 5 ether :(.";
 			}
 		}
 		if (event.returnValues[1] === "tie") {
-			alert("Game is over. Nobody won so you both got your money back");
+			document.querySelector('.playerOnTurn').innerHTML = "Game is over. Nobody won so you both got your money back";
 		}
 	});
 }
@@ -420,8 +418,10 @@ function refreshBoard() {
 			document.querySelector('.field7').innerHTML = boolArray[6];
 			document.querySelector('.field8').innerHTML = boolArray[7];
 			document.querySelector('.field9').innerHTML = boolArray[8];
-
-			if (result._isHostsTurn == true && (userAddress == hostAddress)) {
+			if(gameOver){
+				return;
+			}
+			else if (result._isHostsTurn == true && (userAddress == hostAddress)) {
 				document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
 				return
 			}
