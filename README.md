@@ -23,7 +23,7 @@ We are using the geth client and both websocket and rpc to be able to use remix 
 ## Deploy the contract
 1. do 1.-5. from above    
 
-2. go to https://remix.ethereum.org/ and chose web3 provider    
+2. go to https://remix.ethereum.org/ and chose web3 provider with standard port 8545   
 
 3. after connection click create
 
