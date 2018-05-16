@@ -253,10 +253,8 @@ function listentoEvents() {
 		fromBlock: 'latest',
 		filter: { sender: userAddress }
 	}, function (error, event) {
-		// + JSON.stringify(event.returnValues[1])
 		console.log("HostedGame event received!");
 		console.log("This is the received log-event: " + JSON.stringify(event));
-
 		document.querySelector('.playerOnTurn').innerHTML = "Successfully hosted! Please wait for an opponent to join and make a move!";
 		gameOver = false;
 	});
@@ -346,6 +344,7 @@ function changeUserAddress() {
 }
 
 function host() {
+	clearBoard();
 	document.querySelector('.playerOnTurn').innerHTML = "Hosting new game...";
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
