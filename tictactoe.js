@@ -3,50 +3,27 @@ const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8546'
 var contractAddr; //can be hardcoded after deploy
 var contractAbi = [
 	{
-		"anonymous": false,
-		"inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "getBalance",
+		"outputs": [
 			{
-				"indexed": false,
-				"name": "host",
-				"type": "address"
+				"name": "bal",
+				"type": "uint256"
 			}
 		],
-		"name": "TriggerBoardRefresh",
-		"type": "event"
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "host",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "whoWon",
-				"type": "string"
-			}
-		],
-		"name": "GameOver",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "log",
-				"type": "string"
-			}
-		],
-		"name": "HostedGame",
-		"type": "event"
+		"constant": false,
+		"inputs": [],
+		"name": "withdraw",
+		"outputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "function"
 	},
 	{
 		"constant": false,
@@ -58,38 +35,18 @@ var contractAbi = [
 		"type": "function"
 	},
 	{
-		"anonymous": false,
-		"inputs": [
+		"constant": true,
+		"inputs": [],
+		"name": "owner",
+		"outputs": [
 			{
-				"indexed": false,
-				"name": "sender",
+				"name": "",
 				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "log",
-				"type": "string"
 			}
 		],
-		"name": "JoinedGame",
-		"type": "event"
-	},
-	{
-		"anonymous": false,
-		"inputs": [
-			{
-				"indexed": false,
-				"name": "sender",
-				"type": "address"
-			},
-			{
-				"indexed": false,
-				"name": "error",
-				"type": "string"
-			}
-		],
-		"name": "Error",
-		"type": "event"
+		"payable": false,
+		"stateMutability": "view",
+		"type": "function"
 	},
 	{
 		"constant": false,
@@ -128,49 +85,6 @@ var contractAbi = [
 		"type": "function"
 	},
 	{
-		"inputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "constructor"
-	},
-	{
-		"constant": false,
-		"inputs": [],
-		"name": "withdraw",
-		"outputs": [],
-		"payable": false,
-		"stateMutability": "nonpayable",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "getBalance",
-		"outputs": [
-			{
-				"name": "bal",
-				"type": "uint256"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
-		"constant": true,
-		"inputs": [],
-		"name": "owner",
-		"outputs": [
-			{
-				"name": "",
-				"type": "address"
-			}
-		],
-		"payable": false,
-		"stateMutability": "view",
-		"type": "function"
-	},
-	{
 		"constant": true,
 		"inputs": [
 			{
@@ -195,11 +109,101 @@ var contractAbi = [
 			{
 				"name": "board3",
 				"type": "uint256"
+			},
+			{
+				"name": "_opponent",
+				"type": "address"
 			}
 		],
 		"payable": false,
 		"stateMutability": "view",
 		"type": "function"
+	},
+	{
+		"inputs": [],
+		"payable": false,
+		"stateMutability": "nonpayable",
+		"type": "constructor"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "log",
+				"type": "string"
+			}
+		],
+		"name": "HostedGame",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "log",
+				"type": "string"
+			}
+		],
+		"name": "JoinedGame",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "sender",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "error",
+				"type": "string"
+			}
+		],
+		"name": "Error",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "host",
+				"type": "address"
+			},
+			{
+				"indexed": false,
+				"name": "whoWon",
+				"type": "string"
+			}
+		],
+		"name": "GameOver",
+		"type": "event"
+	},
+	{
+		"anonymous": false,
+		"inputs": [
+			{
+				"indexed": false,
+				"name": "host",
+				"type": "address"
+			}
+		],
+		"name": "TriggerBoardRefresh",
+		"type": "event"
 	}
 ];
 
@@ -424,6 +428,7 @@ function refreshBoard() {
 			if(gameOver){
 				return;
 			}
+			lowerCaseOpponent = result._opponent.toLowerCase();
 			// you are the host
 			if(userAddress == hostAddress){
 				if (result._isHostsTurn == true) {
@@ -435,7 +440,7 @@ function refreshBoard() {
 				}
 			}
 			// you are the opponent
-			else if(userAddress == result._opponent){
+			else if(userAddress == lowerCaseOpponent){
 				if (result._isHostsTurn == false) {
 					document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
 					return
@@ -445,6 +450,8 @@ function refreshBoard() {
 				}
 			}
 			else{
+				console.log("you are not part of the game because the user address is "+userAddress+"but the opponent in the game is: "+result._opponent+" and the host is "+ hostAddress)
+				console.log("and isHoststurn is : "+result._isHostsTurn);
 				document.querySelector('.playerOnTurn').innerHTML = "You are not part of the game!!!";
 				return;
 			}
