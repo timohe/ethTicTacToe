@@ -249,7 +249,7 @@ function changeUserAddress() {
     updateAccountBalance();
 }
 
-function host() 
+function host() {
 	isRefreshPaused = true;
 	gameOver = false;
 	console.log("Hosting new game...");
