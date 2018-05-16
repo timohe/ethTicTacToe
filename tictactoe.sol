@@ -159,12 +159,14 @@ contract TicTacToe
         delete g.gameNotOver;
     }
 
-    function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3){
+    function printBoard(address host) public view returns (bool _isHostsTurn, uint board1, uint board2, uint board3, address _opponent){
         Game storage g = games[host];
         board1 = (999000 + 100 * (g.board[0][0])) + (10 * (g.board[0][1])) + (g.board[0][2]);
         board2 = (999000 + 100 * (g.board[1][0])) + (10 * (g.board[1][1])) + (g.board[1][2]);
         board3 = (999000 + 100 * (g.board[2][0])) + (10 * (g.board[2][1])) + (g.board[2][2]);
         _isHostsTurn = g.isHostsTurn;
+        _opponent = g.opponent
+        
     }
 
     function withdraw() public onlyOwner {

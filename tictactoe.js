@@ -240,13 +240,14 @@ window.onload = function () {
 
 function listentoEvents() {
 	console.log("listening to events...");
-	
 	contract.events.HostedGame({
 		fromBlock: 'latest',
 		filter: { sender: userAddress }
 	}, function (error, event) {
 		// + JSON.stringify(event.returnValues[1])
 		console.log("HostedGame event received!");
+		console.log("This is the received log-event: " + JSON.stringify(event));
+
 		document.querySelector('.playerOnTurn').innerHTML = "Successfully hosted! Please wait for an opponent to join and make a move!";
 		gameOver = false;
 	});
@@ -336,6 +337,7 @@ function changeUserAddress() {
 }
 
 function host() {
+	document.querySelector('.playerOnTurn').innerHTML = "Hosting new game...";
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact, gas: gasToSend })
@@ -351,6 +353,7 @@ function host() {
 
 function joinExistingGame() {
 	hostAddress = document.getElementById("hostAddress").value;
+	document.querySelector('.playerOnTurn').innerHTML = "Joining existing game...";
 	console.log("Joining existing game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.joinExistingGame(hostAddress).send({ from: userAddress, value: valueToTransact, gas: gasToSend })
@@ -365,7 +368,7 @@ function joinExistingGame() {
 
 function play(row, col) {
 	if(!gameOver){
-		console.log("Making move...");
+		document.querySelector('.playerOnTurn').innerHTML = "Making move..";
 		contract.methods.play(hostAddress, row, col).send({ from: userAddress, gas: gasToSend })
 			.on('receipt', function (receipt) {
 				console.log(receipt);
@@ -421,24 +424,28 @@ function refreshBoard() {
 			if(gameOver){
 				return;
 			}
-			else if (result._isHostsTurn == true && (userAddress == hostAddress)) {
-				document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
-				return
+			// you are the host
+			if(userAddress == hostAddress){
+				if (result._isHostsTurn == true) {
+					document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
+					return
+				}else{
+					document.querySelector('.playerOnTurn').innerHTML = "Wait for your opponents move!";
+					return;
+				}
 			}
-			else if (result._isHostsTurn == true && (userAddress != hostAddress)) {
-				document.querySelector('.playerOnTurn').innerHTML = "Wait for your opponents move!";
-				return;
+			// you are the opponent
+			else if(userAddress == result._opponent){
+				if (result._isHostsTurn == false) {
+					document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
+					return
+				}else{
+					document.querySelector('.playerOnTurn').innerHTML = "Wait for your opponents move!";
+					return;
+				}
 			}
-			else if (result._isHostsTurn == false && (userAddress == hostAddress)) {
-				document.querySelector('.playerOnTurn').innerHTML = "Wait for your opponents move!";
-				return;
-			}
-			else if (result._isHostsTurn == false && (userAddress != hostAddress)) {
-				document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
-				return;
-			}
-			else {
-				document.querySelector('.playerOnTurn').innerHTML = "Noooooo clueeeeeeee!!!";
+			else{
+				document.querySelector('.playerOnTurn').innerHTML = "You are not part of the game!!!";
 				return;
 			}
 		});
@@ -471,6 +478,7 @@ function clearBoard() {
 	contract.methods.clearBoard(hostAddress).send({ from: userAddress, gas: gasToSend})
 		.on('receipt', function (receipt) {
 			console.log(receipt);
+			refreshBoard();
 		})
 		.on('error', function (error) {
 			console.log(error);
