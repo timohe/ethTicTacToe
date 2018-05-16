@@ -20,7 +20,7 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 6. Open index.html and you're good to go!    
 
 ## Deploy the contract
-1. do 1.-4. from above    
+1. do 1.-5. from above    
 
 2. go to https://remix.ethereum.org/ and chose web3 provider    
 
@@ -33,22 +33,13 @@ Simple TicTacToe game with betting on the Ethereum Blockchain
 `$ npm install -g remixd`   
 `$ e.g. remixd -s ~/Documents/gitkrakenRepo/ethTicTacToe and click the link button in remix.`   
 
-2. click on the connect button with remix 
+2. click on the connect button in remix 
 
-## To do
-+ Say who is the winner in the text above the board
-+ Tictactoe as square
-
-Done:   
-+ Balance in separate window and gets refreshed
-+ Contract owner can get money left in the contract
-+ Game over so you cant continue playing
-
-## Things that could be improved
-+ Once you hosted, you cannot get your money back. (this is the business model).    
+## Things that could be improved in future   
 + use save math to increase security    
 + Make it possible that one address can host multiple games    
-+ Variable pot amount    
++ Variable pot amount 
++ bet on games from others   
 
 ## Important commands
 `web3.fromWei(eth.getBalance(eth.accounts[1]), "ether")`
