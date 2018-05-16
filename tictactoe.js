@@ -1,4 +1,4 @@
-const web3 = new Web3(new Web3.providers.WebsocketProvider('http://127.0.0.1:8545'));
+const web3 = new Web3(new Web3.providers.WebsocketProvider('ws://localhost:8546'));
 
 var contractAddr; //can be hardcoded after deploy
 var contractAbi = [
@@ -193,7 +193,8 @@ window.onload = function () {
 };
 
 function listenEvents(){	
-	contract.events.allEvents({ fromBlock: 'latest' }, console.log)
+	contract.events.Log({ fromBlock: 'latest' }, function(error, event){ console.log("This is the received event: "+JSON.stringify(event)); })
+	
 }
 
 function getContractAddressSetter() {
