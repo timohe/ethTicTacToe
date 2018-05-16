@@ -249,8 +249,9 @@ function changeUserAddress() {
     updateAccountBalance();
 }
 
-function host() {
+function host() 
 	isRefreshPaused = true;
+	gameOver = false;
 	console.log("Hosting new game...");
 	valueToTransact = web3.utils.toWei('5', 'ether');
 	contract.methods.hostNewGame().send({ from: userAddress, value: valueToTransact, gas: gasToSend })
