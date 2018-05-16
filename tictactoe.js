@@ -243,18 +243,21 @@ window.onload = function () {
 	updateBalance();
 };
 
+//show the right balance
 function updateBalance() {
     setInterval(function(){ updateAccountBalance(); }, 3000);
 }
 
+//set a watcher for incoming events
 function listentoEvents() {
 	console.log("listening to events...");
+
 	contract.events.HostedGame({
 		fromBlock: 'latest',
 		filter: { sender: userAddress }
 	}, function (error, event) {
 		console.log("HostedGame event received!");
-		console.log("This is the received log-event: " + JSON.stringify(event));
+		// console.log("This is the received log-event: " + JSON.stringify(event));
 		document.querySelector('.playerOnTurn').innerHTML = "Successfully hosted! Please wait for an opponent to join and make a move!";
 		gameOver = false;
 	});
@@ -303,6 +306,7 @@ function listentoEvents() {
 	});
 }
 
+//put the different address options in the dropdown
 function populateAddressDropdown() {
 	itemArray = userAddressesArray;
 	for (var i = 0; i < itemArray.length; i++) {
@@ -313,6 +317,7 @@ function populateAddressDropdown() {
 	updateAccountBalance();
 }
 
+//get the different address options
 function getAddressItemsSetter(address) {
 	return function (balance) {
 		var addressItems = document.getElementById("addressDropdown");
@@ -324,10 +329,12 @@ function getAddressItemsSetter(address) {
 	}
 }
 
+//update the balance on the top
 function updateAccountBalance() {
 	web3.eth.getBalance(userAddress).then(setCurrentUserBalance(userAddress));
 }
 
+//set initial balance (refreshed later)
 function setCurrentUserBalance(userAddress) {
 	return function (balance) {
 		accountBalance = web3.utils.fromWei(balance);
@@ -335,6 +342,7 @@ function setCurrentUserBalance(userAddress) {
 	}
 }
 
+//change Address using the dropdown
 function changeUserAddress() {
 	userAddress = document.getElementById("addressDropdown").value;
 	userAddress = userAddress.toLowerCase();
@@ -343,6 +351,7 @@ function changeUserAddress() {
 	refreshBoard();
 }
 
+//initialize a new game and show the board if success
 function host() {
 	document.querySelector('.playerOnTurn').innerHTML = "Hosting new game...";
 	console.log("Hosting new game...");
@@ -360,6 +369,7 @@ function host() {
 	hostAddress = userAddress;
 };
 
+//joins a hosted game
 function joinExistingGame() {
 	hostAddress = document.getElementById("hostAddress").value;
 	document.querySelector('.playerOnTurn').innerHTML = "Joining existing game...";
@@ -375,6 +385,7 @@ function joinExistingGame() {
 		})
 };
 
+//make a move, checks if its your turn and if the game is over already
 function play(row, col) {
 	if(!gameOver){
 		document.querySelector('.playerOnTurn').innerHTML = "Making move..";
@@ -398,6 +409,7 @@ function hideBoard() {
 	document.getElementById("gameBoard").style.display = "none";
 }
 
+//show the current board in the browser
 function refreshBoard() {
 	//dont refresh if the contract is not yet defined
 	if(!contract){return;};
@@ -442,8 +454,13 @@ function refreshBoard() {
 					document.querySelector('.playerOnTurn').innerHTML = "Make a move!";
 					return
 				}else{
-					document.querySelector('.playerOnTurn').innerHTML = "Wait for your opponents move!";
-					return;
+					if(lowerCaseOpponent!="0x0000000000000000000000000000000000000000"){
+						document.querySelector('.playerOnTurn').innerHTML = "Wait for your opponents move!";
+						return;
+					}else{
+						document.querySelector('.playerOnTurn').innerHTML = "Wait for an opponent to join!";
+					}
+					
 				}
 			}
 			// you are the opponent
@@ -459,12 +476,13 @@ function refreshBoard() {
 			else{
 				console.log("you are not part of the game because the user address is "+userAddress+"but the opponent in the game is: "+result._opponent+" and the host is "+ hostAddress)
 				console.log("and isHoststurn is : "+result._isHostsTurn);
-				document.querySelector('.playerOnTurn').innerHTML = "You are not part of the game!!!";
+				document.querySelector('.playerOnTurn').innerHTML = "You are not part of a game!!!";
 				return;
 			}
 		});
 }
 
+//make a move if a user clicks on the board
 function cellClick(cell) {
 	if (cell.id == "0-0") {
 		play(0, 0);
@@ -487,14 +505,3 @@ function cellClick(cell) {
 
 	}
 }
-
-// function clearBoard() {
-// 	contract.methods.clearBoard(hostAddress).send({ from: userAddress, gas: gasToSend})
-// 		.on('receipt', function (receipt) {
-// 			console.log(receipt);
-// 			refreshBoard();
-// 		})
-// 		.on('error', function (error) {
-// 			console.log(error);
-// 		})
-// }
