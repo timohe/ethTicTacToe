@@ -18,7 +18,7 @@ We are using the geth client and both websocket and rpc to be able to use remix 
 5. unlock your account:    
 `> personal.unlockAccount(eth.accounts[0], "123456", 999999);`
 
-6. Open index.html and you're good to go!    
+6. Open index.html and you're good to go! The game was developed and tested on Google Chrome only.   
 
 ## Deploy the contract
 1. do 1.-5. from above    
